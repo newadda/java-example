@@ -39,7 +39,7 @@ subprojects {
 
 project(':module-web') {
     dependencies {
-        compile project(':module-lib')
+
     }
 }
 
