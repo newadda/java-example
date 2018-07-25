@@ -78,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         * UserDetailsService 를 구현하여 사용해야 한다.
         * */
         /*
-        auth.userDetailsService(new CustomUserDetailsService()).passwordEncoder(new CustomPasswordEncoder());
+        auth.userDetailsService(new CustomUserDetailsService(dataSource)).passwordEncoder(new CustomPasswordEncoder());
          */
 
     }

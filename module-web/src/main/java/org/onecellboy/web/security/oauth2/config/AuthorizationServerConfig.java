@@ -144,6 +144,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public AuthorizationServerTokenServices tokenService()
     {
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        defaultTokenServices.setClientDetailsService(clientDetailsService());  // 이걸 꼭 적용해야한다. 나의 경우는 토큰 만료시기가 db상 값을 사용하기 위해 적용했다.
         defaultTokenServices.setTokenStore(tokenStore());
         defaultTokenServices.setSupportRefreshToken(true);
         return defaultTokenServices;
