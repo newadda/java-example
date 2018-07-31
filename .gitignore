@@ -3,7 +3,7 @@
 **/.settings/
 **/.classpath
 **/.project
-
+.idea
 **/out/
 
 # Ignore Gradle GUI config
