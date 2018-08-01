@@ -5,6 +5,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.explore.support.JobExplorerFactoryBean;
+import org.springframework.batch.core.jsr.configuration.xml.JobFactoryBean;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
@@ -92,7 +93,7 @@ public class DBBatchConfig  implements  IBatchConfig{
     protected JobRepository createJobRepository(DataSource dataSource, PlatformTransactionManager transactionManager) throws Exception {
         JobRepositoryFactoryBean jobRepositoryFactoryBean = new JobRepositoryFactoryBean();
         jobRepositoryFactoryBean.setDataSource(dataSource);
-
+        jobRepositoryFactoryBean.setIsolationLevelForCreate("ISOLATION_DEFAULT");
         //// DataSource 만 설정되면 아래는 기본적인 값으로 설정된다.
         // jobRepositoryFactoryBean.setJdbcOperations();
         // jobRepositoryFactoryBean.setIncrementerFactory();
@@ -130,6 +131,7 @@ public class DBBatchConfig  implements  IBatchConfig{
 
     protected JobBuilderFactory createJobBuilderFactory(JobRepository jobRepository)
     {
+
         return new JobBuilderFactory(jobRepository);
     }
 

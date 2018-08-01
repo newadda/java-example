@@ -11,10 +11,14 @@ import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.support.AutomaticJobRegistrar;
+import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
 import org.springframework.batch.core.configuration.support.MapJobRegistry;
 import org.springframework.batch.core.configuration.support.ReferenceJobFactory;
+import org.springframework.batch.core.job.flow.FlowJob;
 import org.springframework.batch.core.jsr.configuration.xml.JobFactoryBean;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.JobOperator;
+import org.springframework.batch.core.launch.support.SimpleJobOperator;
 import org.springframework.batch.core.partition.support.Partitioner;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -24,11 +28,15 @@ import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.transaction.interceptor.TransactionProxyFactoryBean;
 import org.vibur.dbcp.ViburDBCPDataSource;
 
 import javax.sql.DataSource;
+import java.util.Date;
+import java.util.Set;
 
 public class jobTest {
+
 
 
     /**
@@ -40,6 +48,7 @@ public class jobTest {
         public RepeatStatus execute(StepContribution arg0, ChunkContext arg1) throws Exception {
             int commitCount = arg1.getStepContext().getStepExecution().getCommitCount();
             int skipCount = arg0.getSkipCount();
+
             System.out.println("Hello This is a sample example of spring batch : "+commitCount);
             System.out.println("Hello This is a sample example of spring batch : "+skipCount);
             Thread.sleep(1000);
@@ -106,10 +115,25 @@ public class jobTest {
         StepBuilderFactory stepBuilderFactory = DBBatchConfig.getStepBuilderFactory();
 
         TaskletStep step1 = stepBuilderFactory.get("step1").tasklet(new MyTasklet()).build();
-
         Job test = jobBuilderFactory.get("test").start(step1)
                 .build();
 
+        Set<JobExecution> test2 = DBBatchConfig.getJobExplorer().findRunningJobExecutions("test");
+
+        SimpleJobOperator s = new SimpleJobOperator();
+        s.setJobExplorer(DBBatchConfig.getJobExplorer());
+        s.setJobLauncher(DBBatchConfig.getJobLauncher());
+        s.setJobRepository(DBBatchConfig.getJobRepository());
+
+
+        for (JobExecution j: test2
+             ) {
+            System.out.println(j.getId());
+            j.setStatus(BatchStatus.FAILED);
+       //     j.setEndTime(new Date());
+           // DBBatchConfig.getJobRepository().update(j);
+        }
+        System.in.read();
 
 
         JobLauncher jobLauncher = DBBatchConfig.getJobLauncher();
@@ -118,18 +142,23 @@ public class jobTest {
                 .toJobParameters();
 
 
+        JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor = new JobRegistryBeanPostProcessor();
+
 
         MapJobRegistry mapJobRegistry = new MapJobRegistry();
-
 
         //  automaticJobRegistrar.setJobLoader();
 
         mapJobRegistry.register(new ReferenceJobFactory(test));
+       // mapJobRegistry.unregister("test");
 
-        jobLauncher.run(test,jobParameters);
         Job test1 = mapJobRegistry.getJob("test");
 
-        System.out.println(test1);
+        jobLauncher.run(test,jobParameters);
+
+        ;
+
+        System.out.println(test);
         System.in.read();
        // jobLauncher.run(test,jobParameters);
 
