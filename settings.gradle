@@ -10,6 +10,7 @@
 rootProject.name = 'ONE_Server'
 
 
-include 'module-web'
-
+include 'spring-web'
 include 'module-job'
+include 'hibernate-example'
+include 'akka-example'

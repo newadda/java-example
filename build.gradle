@@ -37,7 +37,7 @@ subprojects {
 
 
 
-project(':module-web') {
+project(':spring-web') {
     dependencies {
 
     }
