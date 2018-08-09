@@ -11,6 +11,6 @@ rootProject.name = 'ONE_Server'
 
 
 include 'spring-web'
-include 'module-job'
+include 'spring-batch'
 include 'hibernate-example'
 include 'akka-example'

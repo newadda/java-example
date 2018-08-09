@@ -51,7 +51,8 @@ public class CompositePrimaryKey {
 		System.out.println("======Insert TEST======");
 		session = sessionFactory.openSession();
 		tx = session.beginTransaction();
-		
+
+
 		Apartment_Embeddable apartment1 = new Apartment_Embeddable();
 		apartment1.setOwner_name("땅부자");
 		
@@ -74,8 +75,8 @@ public class CompositePrimaryKey {
 		tx = session.beginTransaction();
 		
 		Apartment_Embeddable.APT_PK apt_pk=new Apartment_Embeddable.APT_PK(apartment1.getId().getDong(), apartment1.getId().getHo());
-		
-		 
+
+
 		Apartment_Embeddable apartment2 =session.get(Apartment_Embeddable.class, apt_pk);
 		
 		System.out.println("*** Dong = "+apartment2.getId().getDong());

@@ -184,12 +184,14 @@ public class DBBatchConfig  implements  IBatchConfig{
         threadPoolTaskExecutor.setQueueCapacity(32);
         threadPoolTaskExecutor.initialize();
         jobLauncher.setTaskExecutor(threadPoolTaskExecutor);
+
         jobLauncher.afterPropertiesSet();
         return jobLauncher;
     }
 
     protected JobRegistry createJobRegistry() {
         MapJobRegistry mapJobRegistry = new MapJobRegistry();
+
         return mapJobRegistry;
     }
 

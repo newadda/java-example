@@ -21,6 +21,7 @@ import org.springframework.batch.core.jsr.configuration.xml.JobFactoryBean;
 import org.springframework.batch.core.launch.JobExecutionNotRunningException;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.JobOperator;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.launch.support.SimpleJobOperator;
 import org.springframework.batch.core.partition.support.Partitioner;
 import org.springframework.batch.core.repository.JobRepository;
@@ -55,6 +56,7 @@ public class jobTest {
      */
     public static class MyTasklet implements Tasklet {
 
+        private  int i=0;
         @Override
         public RepeatStatus execute(StepContribution arg0, ChunkContext arg1) throws Exception {
 
@@ -66,9 +68,14 @@ public class jobTest {
             System.out.println("Hello This is a MyTasklet : "+commitCount);
             System.out.println("Hello This is a MyTasklet : "+skipCount);
             Thread.sleep(1000);
-
-
-            return RepeatStatus.CONTINUABLE;
+            i++;
+            if(i<=20) {
+                System.out.println("Hello This is a CONTINUABLE i=  : "+i);
+                return RepeatStatus.CONTINUABLE;
+            }else
+            {
+               return RepeatStatus.FINISHED;
+            }
 
 
         }
@@ -137,7 +144,7 @@ public class jobTest {
      * 결과 : 하나의 step 이 완료되어야 다음 step으로 넘어간다.
      * @throws Exception
      */
-    @Test
+   // @Test
     public void taskletContinueTest() throws Exception {
         DataSource dataSource = getDataSource("jdbc:mysql://192.168.0.2:3306/oauth2?useSSL=false&characterEncoding=utf-8", "com.mysql.cj.jdbc.Driver"
                 , "shh", "shh");
@@ -160,6 +167,7 @@ public class jobTest {
 
 
         TaskletStep step1 = stepBuilderFactory.get("step1").tasklet(new MyTasklet()).build();
+
         TaskletStep step2 = stepBuilderFactory.get("step2").tasklet(new MyTasklet2()).build();
         Job test = jobBuilderFactory.get("test").start(step1).next(step2)
                 .listener(new JobExecutionListener() {
@@ -205,8 +213,74 @@ public class jobTest {
 
 
     @Test
-    public void taskletStopTest() throws Exception {
+    public void duplicationTest() throws Exception {
+        DataSource dataSource = getDataSource("jdbc:mysql://192.168.0.92:3306/oauth2?useSSL=false&characterEncoding=utf-8", "com.mysql.cj.jdbc.Driver"
+                , "shh", "shh");
+        DBManager dbManager = new DBManager(dataSource);
 
+        DBBatchConfig DBBatchConfig = new DBBatchConfig(dataSource);
+
+        JobBuilderFactory jobBuilderFactory = DBBatchConfig.getJobBuilderFactory();
+
+        StepBuilderFactory stepBuilderFactory = DBBatchConfig.getStepBuilderFactory();
+
+        JobOperator jobOperator = DBBatchConfig.getJobOperator();
+
+        JobRegistry jobRegistry = DBBatchConfig.getJobRegistry();
+
+        JobExplorer jobExplorer = DBBatchConfig.getJobExplorer();
+
+
+
+
+
+        TaskletStep step1 = stepBuilderFactory.get("step1").tasklet(new MyTasklet()).build();
+        TaskletStep step1_1 = stepBuilderFactory.get("step1-1").tasklet(new MyTasklet()).build();
+        TaskletStep step1_2 = stepBuilderFactory.get("step1-2").tasklet(new MyTasklet()).build();
+        TaskletStep step2 = stepBuilderFactory.get("step2").tasklet(new MyTasklet2()).build();
+        Job test = jobBuilderFactory.get("test").start(step1).next(step1_1).next(step2)
+                .listener(new JobExecutionListener() {
+                    @Override
+                    public void beforeJob(JobExecution jobExecution) {
+                        System.out.println("beforeJob");
+                    }
+
+                    @Override
+                    public void afterJob(JobExecution jobExecution) {
+                        System.out.println("afterJob");
+                    }
+                }).build();
+
+
+
+        JobLauncher jobLauncher = DBBatchConfig.getJobLauncher();
+
+        JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
+                .toJobParameters();
+
+        jobRegistry.register(new ReferenceJobFactory(test));
+        JobExecution run = jobLauncher.run(test, jobParameters);
+
+
+        Thread.sleep(5000);
+
+
+        try {
+           // run.stop();
+
+        }finally {
+
+        }
+
+        // jobOperator.stop(run.getJobId());
+
+
+        JobExecution jobExecution = jobExplorer.getJobExecution(run.getJobId());
+        Long time = jobExecution.getJobParameters().getLong("time");
+        System.out.println("para ="+time);
+
+
+        System.in.read();
 
 
 

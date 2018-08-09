@@ -49,7 +49,7 @@ public class SimpleClusterListener extends AbstractActor {
 	        log.info("Member is Up: {}", mUp.member());
 	      })
 	      .match(UnreachableMember.class, mUnreachable -> {
-	      	cluster.down(mUnreachable.member().address());
+	      //	cluster.down(mUnreachable.member().address());
 	        log.info("Member detected as unreachable: {}", mUnreachable.member());
 	      })
 	      .match(MemberRemoved.class, mRemoved -> {
