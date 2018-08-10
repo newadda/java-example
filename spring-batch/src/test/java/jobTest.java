@@ -27,6 +27,7 @@ import org.springframework.batch.core.partition.support.Partitioner;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.scope.context.StepSynchronizationManager;
+import org.springframework.batch.core.scope.context.SynchronizationManagerSupport;
 import org.springframework.batch.core.step.NoSuchStepException;
 import org.springframework.batch.core.step.StepLocator;
 import org.springframework.batch.core.step.tasklet.StoppableTasklet;
@@ -56,6 +57,8 @@ public class jobTest {
      */
     public static class MyTasklet implements Tasklet {
 
+
+
         private  int i=0;
         @Override
         public RepeatStatus execute(StepContribution arg0, ChunkContext arg1) throws Exception {
@@ -69,7 +72,7 @@ public class jobTest {
             System.out.println("Hello This is a MyTasklet : "+skipCount);
             Thread.sleep(1000);
             i++;
-            if(i<=20) {
+            if(i<=5) {
                 System.out.println("Hello This is a CONTINUABLE i=  : "+i);
                 return RepeatStatus.CONTINUABLE;
             }else
@@ -94,6 +97,11 @@ public class jobTest {
             System.out.println("Hello This is a sMyTasklet2: "+commitCount);
             System.out.println("Hello This is a sMyTasklet2 : "+skipCount);
             Thread.sleep(1000);
+
+
+
+
+
 
 
 
@@ -230,15 +238,29 @@ public class jobTest {
 
         JobExplorer jobExplorer = DBBatchConfig.getJobExplorer();
 
+        JobRepository jobRepository = DBBatchConfig.getJobRepository();
 
+        Set<JobExecution> test1 = jobExplorer.findRunningJobExecutions("test");
+        for (JobExecution e: test1
+             ) {
+            System.out.println("jodid = "+e.getJobId());
+            System.out.println("jod status = "+e.getStatus().name());
+            //jobOperator.stop(e.getJobId());
+            e.stop();
+            e.setEndTime(new Date());
+            e.upgradeStatus(BatchStatus.ABANDONED);
+            jobRepository.update(e);
+           // jobOperator.abandon(e.getJobId());
+          //  jobOperator.abandon(e.getJobId());
 
+        }
 
 
         TaskletStep step1 = stepBuilderFactory.get("step1").tasklet(new MyTasklet()).build();
         TaskletStep step1_1 = stepBuilderFactory.get("step1-1").tasklet(new MyTasklet()).build();
         TaskletStep step1_2 = stepBuilderFactory.get("step1-2").tasklet(new MyTasklet()).build();
         TaskletStep step2 = stepBuilderFactory.get("step2").tasklet(new MyTasklet2()).build();
-        Job test = jobBuilderFactory.get("test").start(step1).next(step1_1).next(step2)
+        Job test = jobBuilderFactory.get("test").start(step1).next(step2)
                 .listener(new JobExecutionListener() {
                     @Override
                     public void beforeJob(JobExecution jobExecution) {
@@ -256,21 +278,62 @@ public class jobTest {
         JobLauncher jobLauncher = DBBatchConfig.getJobLauncher();
 
         JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
-                .toJobParameters();
+                .addString("jodId","77").toJobParameters();
 
         jobRegistry.register(new ReferenceJobFactory(test));
         JobExecution run = jobLauncher.run(test, jobParameters);
 
 
-        Thread.sleep(5000);
-
-
+        Thread.sleep(8000);
+        //run.stop();
         try {
-           // run.stop();
+            // run.stop();
+            run.setEndTime(new Date());
+            run.upgradeStatus(BatchStatus
+
+                    .FAILED);
+            jobRepository.update(run);
+            JobExecution jobExecution = jobExplorer.getJobExecution(run.getJobId());
+            Collection<StepExecution> stepExecutions = jobExecution.getStepExecutions();
+            for (StepExecution stepExecution:stepExecutions
+                    ) {
+                stepExecution.setEndTime(new Date());
+                stepExecution.setStatus(BatchStatus.STOPPED);
+                jobRepository.update(stepExecution);
+
+            }
+
+
+/*
+            JobExecution jobExecution = jobExplorer.getJobExecution(run.getJobId());
+            Collection<StepExecution> stepExecutions = jobExecution.getStepExecutions();
+            for (StepExecution stepExecution:stepExecutions
+                    ) {
+                Job test2 = jobRegistry.getJob("test");
+                Step step = ((StepLocator)test2).getStep(stepExecution.getStepName());
+                if (step instanceof TaskletStep) {
+                    Tasklet tasklet = ((TaskletStep)step).getTasklet();
+                    if (tasklet instanceof StoppableTasklet) {
+                        StepSynchronizationManager.register(stepExecution);
+                        ((StoppableTasklet)tasklet).stop();
+                        StepSynchronizationManager.release();
+                    }
+                }
+            }
+*/
+
+
+
 
         }finally {
 
         }
+
+        System.out.println("******************************");
+        Thread.sleep(1000);
+        JobExecution run1 = jobLauncher.run(test, jobParameters);
+
+
 
         // jobOperator.stop(run.getJobId());
 

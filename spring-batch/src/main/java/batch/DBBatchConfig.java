@@ -168,6 +168,7 @@ public class DBBatchConfig  implements  IBatchConfig{
     protected JobExplorer createJobExplorer() throws Exception {
         JobExplorerFactoryBean jobExplorerFactoryBean = new JobExplorerFactoryBean();
         jobExplorerFactoryBean.setDataSource(this.dataSource);
+
         jobExplorerFactoryBean.afterPropertiesSet();
 
         return jobExplorerFactoryBean.getObject();

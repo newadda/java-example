@@ -78,7 +78,7 @@ public class ExamplePersistentActor extends AbstractPersistentActor {
 	
 	@Override
 	public String persistenceId() {
-		
+		log.info("persistenceId= {}", getSelf().path().name());
 		return getSelf().path().name();
 	}
 

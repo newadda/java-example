@@ -3,10 +3,12 @@
 **/.settings/
 **/.classpath
 **/.project
-.idea
-**/.idea
-**/.gradle
+.idea/
+**/.idea/
+**/.gradle/
 **/out/
+**/journal*/
+**/snapshots*/
 
 # Ignore Gradle GUI config
 gradle-app.setting
