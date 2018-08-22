@@ -9,6 +9,7 @@
 **/out/
 **/journal*/
 **/snapshots*/
+**/target/
 
 # Ignore Gradle GUI config
 gradle-app.setting

@@ -2,10 +2,8 @@ package org.onecellboy.akka.actor;
 
 import java.util.concurrent.TimeUnit;
 
-import akka.actor.AbstractActor;
-import akka.actor.ActorSelection;
-import akka.actor.OneForOneStrategy;
-import akka.actor.SupervisorStrategy;
+import akka.actor.*;
+import akka.cluster.pubsub.DistributedPubSub;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.japi.pf.DeciderBuilder;
@@ -20,11 +18,12 @@ public class MyActor extends AbstractActor {
 	private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
 
 
-	
+
 	@Override
 	public void postStop() throws Exception {
 		 log.info("postStop()");
 		super.postStop();
+
 	}
 
 
@@ -38,13 +37,13 @@ public class MyActor extends AbstractActor {
 
 
 	/**
-	 * 
+	 *
 	 * 이 부분이 메세지를 받는 부분이다.
 	 * */
 	@Override
 	public Receive createReceive() {
 		// TODO Auto-generated method stub
-		
+
 		return receiveBuilder()
 				.match(String.class,  s->{
 					 log.info("Received String message: {}", s);
@@ -52,10 +51,10 @@ public class MyActor extends AbstractActor {
 				.matchAny(o->{
 					log.info("Received unKnown message");
 				})
-				
+
 				.build();
-		
-	
+
+
 	}
 
 }

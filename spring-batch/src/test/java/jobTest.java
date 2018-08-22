@@ -273,9 +273,12 @@ public class jobTest {
                     }
                 }).build();
 
-
+        JobExecution jobExecution1 = jobExplorer.getJobExecution(135l);
+        jobExecution1.stop();
+        Thread.sleep(8000);
 
         JobLauncher jobLauncher = DBBatchConfig.getJobLauncher();
+
 
         JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis())
                 .addString("jodId","77").toJobParameters();
