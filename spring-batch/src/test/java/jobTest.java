@@ -38,14 +38,18 @@ import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.core.env.PropertySource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.interceptor.TransactionProxyFactoryBean;
 import org.vibur.dbcp.ViburDBCPDataSource;
 
 import javax.sql.DataSource;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.io.FileInputStream;
+import java.util.*;
 
 
 public class jobTest {
@@ -73,7 +77,10 @@ public class jobTest {
             Thread.sleep(1000);
             i++;
             if(i<=5) {
-                System.out.println("Hello This is a CONTINUABLE i=  : "+i);
+                System.out.println("--Hello This is a CONTINUABLE i=  : "+i);
+                arg1.getStepContext().getStepExecution().getExecutionContext().put("tset","test11");
+                arg1.getStepContext().getJobExecutionContext().put("tset","test11");
+
                 return RepeatStatus.CONTINUABLE;
             }else
             {
@@ -169,7 +176,6 @@ public class jobTest {
         JobRegistry jobRegistry = DBBatchConfig.getJobRegistry();
 
         JobExplorer jobExplorer = DBBatchConfig.getJobExplorer();
-
 
 
 
@@ -285,6 +291,7 @@ public class jobTest {
 
         jobRegistry.register(new ReferenceJobFactory(test));
         JobExecution run = jobLauncher.run(test, jobParameters);
+
 
 
         Thread.sleep(8000);
