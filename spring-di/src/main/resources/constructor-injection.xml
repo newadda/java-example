@@ -1,0 +1,38 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<!-- 생성자를 통한 Injection 방법이다. -->
+<beans xmlns = "http://www.springframework.org/schema/beans"
+       xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-5.0.xsd">
+
+
+    <bean id="message1" class="java.lang.String">
+        <constructor-arg value="message1"></constructor-arg>
+    </bean>
+
+    <!-- injection 할 값을 직접 입력 할 경우 value tag를 사용한다. -->
+    <bean id = "conPrint1" class = "org.onecellboy.example.ConstructorPrint">
+        <constructor-arg value="value_message"/>
+    </bean>
+
+    <!-- injection 할 값을 다른 bean 을 사용할 때는 ref tag를 사용하고 bean의 id 를 입력한다.
+        또한 생성자가 여러 파라미터를 필요로 할 경우 index tag 를 통해 순서를 지정할 수 있다.
+    -->
+    <bean id="conPrint2" class = "org.onecellboy.example.ConstructorPrint">
+        <constructor-arg index="0" ref="message1"/>
+    </bean>
+
+    <!-- injection 할 값을 직접 입력 할 경우 value tag를 사용한다. -->
+    <bean id = "conPrint3" class = "org.onecellboy.example.ConstructorPrint">
+        <constructor-arg >
+            <value>Hello3</value>
+        </constructor-arg>
+    </bean>
+
+    <!-- 생성자의 파라미터가 여러개일 경우 type을 통해 매칭 시킬 수 있다. -->
+    <bean id="conPrint4" class = "org.onecellboy.example.ConstructorPrint">
+        <constructor-arg type="java.lang.String" value="Hello~~"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,59 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<!-- setter를 통한 Injection 방법이다. -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="message1" class="java.lang.String" >
+        <constructor-arg value="Hello~~~"></constructor-arg>
+    </bean>
+
+    <!-- name은 setter 의 이름이다. setMessage() 메소드에서 set 만 제거한 이름이다. value은 값을 직접 입력한다.  -->
+    <bean id = "setPrint1" class = "org.onecellboy.example.SetterPrint">
+        <property name="message" value="Hello setPrint1"></property>
+    </bean>
+
+    <!-- injection 할 값을 다른 bean 을 사용할 때는 ref tag를 사용하고 bean의 id 를 입력한다. -->
+    <bean id="setPrint2" class = "org.onecellboy.example.SetterPrint">
+        <property name="message" ref="message1"></property>
+    </bean>
+
+
+    <!-- ref 와 value를 tag에서 element 로 바꾸었을 때 -->
+    <bean id="setPrint3" class = "org.onecellboy.example.SetterPrint">
+        <property name="message">
+            <ref bean="message1"></ref>
+        </property>
+    </bean>
+
+    <bean id="setPrint4" class = "org.onecellboy.example.SetterPrint">
+        <property name="message">
+            <value>Hello SetPrint4</value>
+        </property>
+    </bean>
+
+    <!-- value 에 null을 넣는 법 -->
+    <bean id="setPrint5" class = "org.onecellboy.example.SetterPrint">
+        <property name="message">
+            <null/>
+        </property>
+    </bean>
+
+
+
+    <!-- ref Element 에서 local 태그 사용시에는 자신의 xml 에서만 bean 을 참조한다. 라고 했지만..
+    spring 4.0 beans xsd 부터는 더이상 지원하지 않는다.
+    <bean id="setPrint" class = "org.onecellboy.example.SetterPrint">
+        <property name="message">
+            <ref local="message1"></ref>
+        </property>
+    </bean>
+ -->
+
+
+
+
+</beans>

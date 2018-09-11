@@ -1,0 +1,18 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<!-- default-lazy-init 는 lazy-init 의 기본값을 지정한다.-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="true"
+>
+
+    <!-- lazy-init 가 true이면 해당 bean을 실제 사용할 때 생성한다.
+         false 이면 미리 bean을 생성한다. -->
+    <bean id="message1" class="java.lang.String" lazy-init="true">
+        <constructor-arg value="Hello~~~"></constructor-arg>
+    </bean>
+
+
+</beans>
