@@ -6,7 +6,7 @@
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.password">shh</property>
-        <property name="hibernate.connection.url">jdbc:mysql://192.168.0.92:3306/DB_TEST?useSSL=false&amp;characterEncoding=UTF-8</property>
+        <property name="hibernate.connection.url">jdbc:mysql://192.168.0.39:3306/DB_TEST?useSSL=false&amp;characterEncoding=UTF-8</property>
         <property name="hibernate.default_schema">DB_TEST</property>
         <property name="hibernate.connection.username">shh</property>
 
@@ -23,7 +23,11 @@
 
         <!-- Enable Hibernate's automatic session context management -->
         <property name="current_session_context_class">thread</property>
-
+        <!--<property name="hibernate.transaction.manager_lookup_class">org.springframework.orm.hibernate5.HibernateTransactionManager.class</property>-->
+        <!--
+                <property name="hibernate.current_session_context_class">org.hibernate.context.JTASessionContext</property>
+                <property name="jta.UserTransaction">java:comp/UserTransaction</property>
+         -->
 
         <!-- JDBC connection pool (use the built-in) -->
         <!-- <property name="connection.pool_size">1</property>-->

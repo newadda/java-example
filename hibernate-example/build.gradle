@@ -52,7 +52,10 @@ dependencies {
     
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     compile group: 'org.slf4j', name: 'slf4j-ext', version: '1.7.25'
-    
+
+
+    // spring ORM
+    compile group: 'org.springframework', name: 'spring-orm', version: '5.0.9.RELEASE'
 }
 
 compileJava.options.encoding = 'UTF-8'
