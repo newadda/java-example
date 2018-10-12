@@ -15,3 +15,5 @@ include 'spring-batch'
 include 'hibernate-example'
 include 'akka-example'
 include 'spring-di'
+include 'spring-db'
+
