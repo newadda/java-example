@@ -29,8 +29,8 @@ plugins {
     id 'java-library'
     id 'eclipse'
     id 'idea'
-    id 'org.springframework.boot' version '2.0.3.RELEASE'  // bootjar 가능
-    id 'io.spring.dependency-management' version '1.0.5.RELEASE' // sprint-boot 의 의존성 관리
+    id 'org.springframework.boot' version '2.0.3.RELEASE'  // *bootjar 가능
+    id 'io.spring.dependency-management' version '1.0.5.RELEASE' // *sprint-boot 의 의존성 관리
     id 'war' // generate war file
 }
 
@@ -38,6 +38,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 
+// 스프링 로깅을 바꾸기 위해서 필요함
 configurations {
     compile.exclude module: 'spring-boot-starter-logging' // compile configuration에서 특정 모듈 제외
 

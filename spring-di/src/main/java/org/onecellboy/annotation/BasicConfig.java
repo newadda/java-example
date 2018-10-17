@@ -1,13 +1,12 @@
 package org.onecellboy.annotation;
 
 import org.onecellboy.Basic;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
 
 @Configuration
+@ComponentScan("org.onecellboy.annotation.test")
 public class BasicConfig {
 
     @Bean
@@ -17,11 +16,16 @@ public class BasicConfig {
         return new Basic("basic primary");
     }
 
+    @Bean
+    public String str()
+    { return "test";}
+
+
 
     @Bean
     public Basic basic()
     {
-        return new Basic("basic");
+        return new Basic(str());
     }
 
     @Bean("basic2")

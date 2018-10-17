@@ -126,10 +126,21 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .tokenServices(tokenService())
                 .authorizationCodeServices(authorizationCodeServices())
                 .approvalStore(approvalStore())
-                .authenticationManager(authenticationManager) // grant_type : password 를 위해서는 AuthenticationManager를 등록해야 한다.
+                .authenticationManager(authenticationManager); // grant_type : password 를 위해서는 AuthenticationManager를 등록해야 한다.
                 //.userDetailsService(); // refresh_token 을 하기 위해서는 UserDetailsService를 꼭 등록해야한다.
 
-        ;
+        /* // oauth2 exception 처리 핸들링 법
+        .exceptionTranslator(exception -> {
+            if (exception instanceof OAuth2Exception) {
+                OAuth2Exception oAuth2Exception = (OAuth2Exception) exception;
+                return ResponseEntity
+                        .status(oAuth2Exception.getHttpErrorCode())
+                        .body(new CustomOauthException(oAuth2Exception.getMessage()));
+            } else {
+                throw exception;
+            }
+        });
+        */
     }
 
 
@@ -166,7 +177,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 
     @Bean
-    @Primary
+    @Primary // clientDetailsService 란 이름이 이미 존재하는 듯하다. 때문에 Primary 를 통해 주 클래스 설정을 했다.
     public ClientDetailsService clientDetailsService() {
         //
 

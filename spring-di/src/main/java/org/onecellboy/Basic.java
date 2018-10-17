@@ -1,6 +1,6 @@
 package org.onecellboy;
 
-public class Basic {
+public class Basic  implements IBasic{
 
     private String str;
 

@@ -57,10 +57,14 @@ import java.io.IOException;
  *          이럴 때 HttpSecurity 설정은 ResourceServerConfigurerAdapter 에서 다 하는 것이 좋다.
  *          즉 oauth2 를 사용할 때는 ResourceServerConfigurerAdapter 에서 접근제어 설정
  *          Basic auth(spring security)를 사용 할 때는 WebSecurityConfigurerAdapter 에 접근제어 설정
+ *
+ *          @EnableResourceServer 는 리소스 서버로 동작하게 해준다. 리소스 서버는 원격지 인가서버에게  restful api를 통해 액세스 토큰을 확인하거나
+ *          DB 에 직접 접근하여 액세스 토큰 정보를 가져 올 수 있다.
+ *
+ *          리소스 서버에서만 필요
  * */
 @Configuration
 @EnableResourceServer
-
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired

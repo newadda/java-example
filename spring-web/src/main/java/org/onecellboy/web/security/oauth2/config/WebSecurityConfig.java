@@ -36,6 +36,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
  *          이럴 때 HttpSecurity 설정은 ResourceServerConfigurerAdapter 에서 다 하는 것이 좋다.
  *          즉 oauth2 를 사용할 때는 ResourceServerConfigurerAdapter 에서 접근제어 설정
  *          Basic auth(spring security)를 사용 할 때는 WebSecurityConfigurerAdapter 에 접근제어 설정
+ *
+ *          인가서버에서 필요
 * */
 @Configuration
 @EnableWebSecurity
