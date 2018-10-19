@@ -9,11 +9,12 @@
 
 rootProject.name = 'ONE_Server'
 
-
+include 'spring-lib'
 include 'spring-web'
 include 'spring-batch'
 include 'hibernate-example'
 include 'akka-example'
 include 'spring-di'
 include 'spring-db'
+// "services:webservice"
 

@@ -133,6 +133,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     /**
      * 자원에 대한 CRUD에 대한 접근권한을 지정할 수 있다.
+     * 인증 없이 허용하는 룰을 앞에 인증을 필요로 하는 것을 뒤에 작성하자.
+     * 예)
+     * http.authorizeRequests().antMatchers("/test").permitAll(); // /test 에 대해 인증 필요없음
+     * http.authorizeRequests().anyRequest().authenticated();  // 모든 요청에 대해 인증 필요
+     * 이렇게 해주어야 /test 는 인증이 필요없이 요청 가능해 진다. 반대로 작성하면 /test 에대한 허용은 무시된다.
+     *
+     *
      * @param http
      * @throws Exception
      */
@@ -152,6 +159,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 
 
+        // TODO super.configure 는 기본이 모든 요청에 대한 인증이 필요하게 설정한다.
+        // TODO 때문에 이 앞에 인증없이도 허용할 리소스에 대해 정의해야한다.
+        //super.configure(http);
+
+
         // TODO 이 밑으로 접근제어 하면 된다.
         // 예시 http.authorizeRequests().antMatchers("/authtest1").access("hasRole('USER') and #oauth2.hasScope('write1')");
         /* 예시
@@ -162,9 +174,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 
         // TODO 주석을 풀면 모든 요청이 인증되어야 한다.
-        //super.configure(http); // http.authorizeRequests().anyRequest().authenticated(); 모든 요청이 인증되어야 한다.
-
-
+        //http.authorizeRequests().antMatchers("/test").permitAll(); // /test 에 대해서는 인증 필요 없음
+        //http.authorizeRequests().anyRequest().authenticated(); //모든 요청이 인증되어야 한다.
+        http.authorizeRequests().antMatchers("/test").permitAll();
+        http.authorizeRequests().anyRequest().permitAll();
 
 
       //  http.authorizeRequests().antMatchers("/authtest2").authenticated().and().formLogin();
@@ -299,7 +312,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 // oauth2 grant type - authorization code 사용시 /oauth/authorize 요청하면 /login 으로 리다이렉션하여
                 // 사용자 인증하고 다시 /oauth/authorize 다시 리다이렉션하여 code를 받게 된다.
                 .antMatchers("/oauth/authorize").authenticated()
-                //  .antMatchers("/login").permitAll() // login 페이지 허용, 굳이 필요없는 듯
+                 // .antMatchers("/test*").permitAll() // login 페이지 허용, 굳이 필요없는 듯
                 //.anyRequest().hasRole("USER") // 그외는 ROLE_USER 필요
                 //.and()
                 //.exceptionHandling()

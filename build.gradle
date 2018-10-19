@@ -4,15 +4,23 @@
  * This is a general purpose Gradle build.
  * Learn how to create Gradle builds at https://guides.gradle.org/creating-new-gradle-builds/
  */
+
+
 buildscript {
     repositories {
         mavenCentral()
     }
+    ext { springBootVersion = '2.0.6.RELEASE' }
     dependencies {
         // 하위 프로젝트 에서 Plugin request for plugin already on the classpath must not include a version 오류로 주석 처리함
         //classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE")
+
+     //   classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+       // classpath "io.spring.gradle:dependency-management-plugin:1.0.6.RELEASE"
     }
 }
+
+
 
 
 subprojects {
@@ -21,6 +29,7 @@ subprojects {
 
     apply plugin: 'java'
     apply plugin: 'eclipse'
+//    apply plugin: 'io.spring.dependency-management'
 
     sourceCompatibility = 1.8
 
@@ -39,7 +48,7 @@ subprojects {
 
 project(':spring-web') {
     dependencies {
-
+        compile project(':spring-lib')
     }
 }
 

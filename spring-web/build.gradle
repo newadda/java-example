@@ -29,10 +29,11 @@ plugins {
     id 'java-library'
     id 'eclipse'
     id 'idea'
-    id 'org.springframework.boot' version '2.0.3.RELEASE'  // *bootjar 가능
-    id 'io.spring.dependency-management' version '1.0.5.RELEASE' // *sprint-boot 의 의존성 관리
+//    id 'io.spring.dependency-management' version '1.0.5.RELEASE' // *sprint-boot 의 의존성 관리
     id 'war' // generate war file
+
 }
+
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -78,7 +79,8 @@ dependencies {
     // ------ [web]web 을 위해서 필요 -------
     // Tomcat embeded container , war 생성시 providedRuntime 사용, jar 생성시 complie 사용
     //compile("org.springframework.boot:spring-boot-starter-tomcat") // war 생성시 주석처리, jar 생성시 필요
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat") //jar 생성시 주석처리
+    //providedRuntime("org.springframework.boot:spring-boot-starter-tomcat") //jar 생성시 주석처리
+  //  provided ('javax.servlet:javax.servlet-api:4.0.1')
 
     // JSTL tag lib
     compile("javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:1.2.2")
@@ -128,7 +130,7 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test:2.0.3.RELEASE')
 
 
-
+    compile project(':spring-lib')
 
     // log
   // compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.8.2'
@@ -171,8 +173,3 @@ task wrapper(type: Wrapper) {
     gradleVersion = '4.9'
 }
 
-/* war 설정 */
-bootWar {
-    baseName = 'module-web-war'
-    version = '0.0.1-SNAPSHOT'
-}
