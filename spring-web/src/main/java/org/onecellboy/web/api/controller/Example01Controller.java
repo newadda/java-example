@@ -16,6 +16,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.DefaultMessageCodesResolver;
 import org.springframework.validation.annotation.Validated;
@@ -141,6 +142,7 @@ public class Example01Controller extends  AbstractController{
 
 
         Set<ConstraintViolation<Test>> validate = validator.validate(t);
+        
 
         return "test";
     }
