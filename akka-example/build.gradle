@@ -5,9 +5,17 @@
  * For more details take a look at the Java Libraries chapter in the Gradle
  * user guide available at https://docs.gradle.org/3.5/userguide/java_library_plugin.html
  */
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.2"
+    }
+}
+
 
 // Apply the java-library plugin to add support for Java Library
 apply plugin: 'java-library'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -16,6 +24,22 @@ repositories {
     jcenter()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
+
+
+
+compileJava.options.encoding = 'UTF-8'
+sourceCompatibility = 1.8
+
+// akka 포함 실행 jar 만들때 shadow 를 이용해야 한다.
+shadowJar {
+    manifest {
+        attributes 'Main-Class':  'Application'
+    }
+
+    append("reference.conf")
+}
+
+
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.

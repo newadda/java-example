@@ -13,18 +13,18 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Properties;
 
 
-@ContextConfiguration
+
 @ComponentScan(basePackages = {"org.onecellboy.config"},
         basePackageClasses = PersistenceConfig.class)
 public class Application {
@@ -77,6 +77,8 @@ public class Application {
             });
             t.start();
             bean.run();
+            bean.run();
+            bean.run();
 
          }catch(Exception e)
         {
@@ -89,6 +91,7 @@ public class Application {
     public void run()
     {
         Session currentSession = sessionFactory.getCurrentSession();
+
 
         NativeQuery sqlQuery = currentSession.createSQLQuery("select * from test");
         List<Object> rows = sqlQuery.list();
@@ -106,8 +109,10 @@ public class Application {
         TransactionDefinition def = new DefaultTransactionDefinition();
         TransactionStatus status = transactionManager.getTransaction(def);
 
+
+        Session currentSession=null;
         try {
-            Session currentSession = sessionFactory.getCurrentSession();
+             currentSession = sessionFactory.getCurrentSession();
 
             NativeQuery sqlQuery = currentSession.createSQLQuery("select * from test");
             List<Object> rows = sqlQuery.list();
@@ -121,6 +126,7 @@ public class Application {
                 transactionManager.rollback(status);
                 throw e;
             }
+        currentSession.close();
 
     }
 
