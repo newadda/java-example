@@ -2,6 +2,8 @@ package org.onecellboy.web.security.oauth2.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -10,6 +12,17 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 /**
@@ -40,6 +53,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
  *          인가서버에서 필요
 * */
 @Configuration
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) //@PreAuthorize, @PostAuthorize Annotation 사용을 위해서 선언
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -71,9 +85,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         /* 메모리 기반 계정 일 때*/
+        String shh = new CustomPasswordEncoder().encode("shh");
         auth.inMemoryAuthentication()
-                .withUser("shh").password(new CustomPasswordEncoder().encode("shh")).roles("USER");
-                 //.and().passwordEncoder(); // 패스워드 인코딩법
+                .withUser("shh").password(new CustomPasswordEncoder().encode("shh").substring(8)).roles("USER");
+               // .and().passwordEncoder(new CustomPasswordEncoder()); // 패스워드 인코딩법
 
 
 

@@ -99,12 +99,16 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public ResourceServerTokenServices localTokenServices() {
         final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore);
+
         return defaultTokenServices;
     }
 
 
-
-
+    /**
+     * 리소스 서버 설정이다.
+     * @param resources
+     * @throws Exception
+     */
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 
@@ -157,7 +161,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         // oauth2 인증용 설정이다.
         this.oauthConfigure(http);
 
+        /* ===중요=== */
+        // 리소스 서버와 인증 서버가 같이 동작시(리소스 서버 설정, 인증 서버 설정 동시 존재)시
+        // "/oauth/check_token", "/oauth/token" 등 꼭 인증되어야 하기 때문에 아래와 같은 설정을 해야한다.
+        // 기본 설정이다.
+        http.authorizeRequests().antMatchers("/oauth/*").authenticated();
 
+        // 인증이 무조건 필요한 리소스를 등록한다.
+        // http.authorizeRequests().antMatchers("/authrequried").authenticated();
 
         // TODO super.configure 는 기본이 모든 요청에 대한 인증이 필요하게 설정한다.
         // TODO 때문에 이 앞에 인증없이도 허용할 리소스에 대해 정의해야한다.
@@ -178,6 +189,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //http.authorizeRequests().anyRequest().authenticated(); //모든 요청이 인증되어야 한다.
         http.authorizeRequests().antMatchers("/test").permitAll();
         http.authorizeRequests().anyRequest().permitAll();
+        //http.authorizeRequests().anyRequest().authenticated();
 
 
       //  http.authorizeRequests().antMatchers("/authtest2").authenticated().and().formLogin();

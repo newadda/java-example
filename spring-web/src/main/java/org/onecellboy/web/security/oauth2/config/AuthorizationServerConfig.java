@@ -5,10 +5,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.exceptions.InvalidScopeException;
+import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -20,12 +24,19 @@ import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.io.IOException;
 
 /**
  * AuthorizationServerConfigurerAdaper 는 Oauth2 의 클라이언트 인증을 담당한다.
@@ -62,6 +73,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         security
                 .tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()"); // 인증된 사용자만이 /oauth/check_token 가능
+
+
 
     }
 
@@ -129,7 +142,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authenticationManager(authenticationManager); // grant_type : password 를 위해서는 AuthenticationManager를 등록해야 한다.
                 //.userDetailsService(); // refresh_token 을 하기 위해서는 UserDetailsService를 꼭 등록해야한다.
 
-        /* // oauth2 exception 처리 핸들링 법
+        /* // oauth2 관련 exception 처리 핸들링 법 , 일단 기본인증 성공 (header Authorization 은 성공한 상태일때) 후 token이나 권한 실패일때
+        // 다시 말하지만 /oauth/* 에 대한 header Authorization 실패에 대한 핸들링은 아니다.
         .exceptionTranslator(exception -> {
             if (exception instanceof OAuth2Exception) {
                 OAuth2Exception oAuth2Exception = (OAuth2Exception) exception;

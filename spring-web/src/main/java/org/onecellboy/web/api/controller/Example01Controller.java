@@ -2,6 +2,7 @@ package org.onecellboy.web.api.controller;
 
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
+import org.hibernate.validator.internal.constraintvalidators.bv.NotNullValidator;
 import org.hibernate.validator.internal.engine.ValidatorFactoryImpl;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorContextImpl;
 import org.hibernate.validator.internal.metadata.core.ConstraintHelper;
@@ -17,8 +18,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.DefaultMessageCodesResolver;
+import org.springframework.validation.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.WebDataBinder;
@@ -28,6 +28,7 @@ import org.onecellboy.web.api.response.error.ApiError;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.*;
+import javax.validation.Validator;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
@@ -123,6 +124,7 @@ public class Example01Controller extends  AbstractController{
                          HttpServletRequest request, HttpServletResponse response)
     {
 
+
         String s = validator.getClass().toString();
 
         return "test";
@@ -136,22 +138,90 @@ public class Example01Controller extends  AbstractController{
     {
 
 
+
         Test t = new Test();
         t.p="asdf";
 
 
 
         Set<ConstraintViolation<Test>> validate = validator.validate(t);
-        
+
 
         return "test";
     }
 
-    public  class Test{
-        @Phone
-        String p;
+    @RequestMapping(value = {"test3/{id}"},method = RequestMethod.GET,produces = {"application/json"}/*,headers={"name=pankaj", "id=1"}*/)
+    @ResponseBody
+    public String test2(@Validated @ModelAttribute  Test test,BindingResult result2,@Validated @ModelAttribute  Test2 test3,BindingResult result,
+                        HttpServletRequest request, HttpServletResponse response)
+    {
+
+        String code = result2.getAllErrors().iterator().next().getCode();
+        Test t = new Test();
+        t.p="asdf";
+        result2.rejectValue("p","org.onecellboy.common.spring.validation.phone.message","{org.onecellboy.common.spring.validation.phone.message}");
+        result2.addError(new FieldError("p","org.onecellboy.common.spring.validation.phone.message","{org.onecellboy.common.spring.validation.phone.message}"));
+
+        Set<ConstraintViolation<Test>> validate = validator.validate(t);
+
+
+        return "test";
+    }
+    @RequestMapping(value = {"authrequried"},method = RequestMethod.GET,produces = {"application/json"}/*,headers={"name=pankaj", "id=1"}*/)
+    @ResponseBody
+    public String authRequried()
+    {
+        return "test";
     }
 
+
+    public  class Test{
+        @Phone
+        @NotNull
+        String p;
+
+
+        int t;
+
+        public String getP() {
+            return p;
+        }
+
+        public void setP(String p) {
+            this.p = p;
+        }
+
+        public int getT() {
+            return t;
+        }
+
+        public void setT(int t) {
+            this.t = t;
+        }
+    }
+
+    public  class Test2{
+        @Phone
+        String p;
+
+        int id;
+
+        public String getP() {
+            return p;
+        }
+
+        public void setP(String p) {
+            this.p = p;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+    }
 
 
 
