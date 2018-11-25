@@ -106,7 +106,25 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes(
                         "password","authorization_code", "refresh_token")
                 .scopes("read");
+
         */
+           /*
+                clients.inMemory().withClient("tonr")
+			 			.resourceIds(SPARKLR_RESOURCE_ID)
+			 			.authorizedGrantTypes("authorization_code", "implicit")
+			 			.authorities("ROLE_CLIENT")
+			 			.scopes("read", "write")
+			 			.secret("secret")
+						.redirectUris("http://localhost:8080/tonr2/sparklr/photos")
+			 		.and()
+			 		.withClient("tonr-with-redirect")
+			 			.resourceIds(SPARKLR_RESOURCE_ID)
+			 			.authorizedGrantTypes("authorization_code", "implicit")
+			 			.authorities("ROLE_CLIENT")
+			 			.scopes("read", "write")
+			 			.secret("secret")
+			 			.redirectUris(tonrRedirectUri)
+			 			*/
 
 
         /* clientDetailsService 직접 구현*/

@@ -1,9 +1,12 @@
 package org.onecellboy.web.security.oauth2.config;
 
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.expression.AbstractSecurityExpressionHandler;
+import org.springframework.security.access.expression.SecurityExpressionOperations;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -12,14 +15,17 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -51,9 +57,9 @@ import java.io.IOException;
  *          Basic auth(spring security)를 사용 할 때는 WebSecurityConfigurerAdapter 에 접근제어 설정
  *
  *          인가서버에서 필요
+ *          basic 인증에 대한 부분은 이곳에서 처리한다.
 * */
 @Configuration
-
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) //@PreAuthorize, @PostAuthorize Annotation 사용을 위해서 선언
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -71,6 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     @Bean(name = "authenticationManager")
     public AuthenticationManager authenticationManagerBean() throws Exception {
+
         return super.authenticationManagerBean();
     }
 
@@ -159,8 +166,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         ////  정의하지 않으면 기본 접근 제어는 다 허용이다. 하나씩 막는 개념이다.
 
+       /* @EnableResourceServer 없다면 이곳에서 httpBasic 인증(Header Authorization basic)
+       /* 즉 Oauth2 의 client 인증(Header Authorization basic) 실패에 대한 Handling 을 할 수 있다.*/
+   http.authorizeRequests().anyRequest().permitAll();
         /// oauth2 인증 설정
-        this.oauthConfigure(http);
+       this.oauthConfigure(http);
 
     }
 
@@ -188,7 +198,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // TODO: put CSRF protection back into this endpoint
                 .csrf()
-                //.requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize")) // CSRF 지정 패턴
+                 .requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize")) // CSRF 지정 패턴
                 .disable() //CSRF 끄기
                 .logout()
                 //.logoutUrl("/logout") // 로그아웃 URL
@@ -199,6 +209,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.failureUrl("/error") // 로그인 실패시 URL
                 .formLogin() //로그인
                 .permitAll();  // 허용
+
+        /*
+          http
+            .authorizeRequests()
+                .antMatchers("/login.jsp").permitAll()
+                .anyRequest().hasRole("USER")
+                .and()
+            .exceptionHandling()
+                .accessDeniedPage("/login.jsp?authorization_error=true")
+                .and()
+            // TODO: put CSRF protection back into this endpoint
+            .csrf()
+                .requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize"))
+                .disable()
+            .logout()
+            	.logoutUrl("/logout")
+                .logoutSuccessUrl("/login.jsp")
+                .and()
+            .formLogin()
+            	.loginProcessingUrl("/login")
+                .failureUrl("/login.jsp?authentication_error=true")
+                .loginPage("/login.jsp");
+        */
 
     }
 

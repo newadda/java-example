@@ -16,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.token.TokenService;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,9 +30,11 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -121,10 +124,17 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
         //  ==== 만약 인증서버 한대에 서로 다른 리소스 서버가 있을 경우 Resource ID를 통해 분류가능하다.
         //resources.resourceId()
+        resources.authenticationEntryPoint(new AuthenticationEntryPoint() {
+            @Override
+            public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+
+            }
+        });
 
 
         // ===== Exception Handling ====
-        // access token 실패시
+        // access token 실패시 (resource 접근시 header Authorization 실패시) 여기서 핸들링한다.
+        // 또한 /oauth/* 에서 Header Authorization Basic 의 실패도 여기서 받을 수 있다. 이경우 Authorization 헤더가 존재할 때이다.
         //resources.authenticationEntryPoint();
 
         //  access token 은 존재하나 scope, role 등 권한 위반시
@@ -161,11 +171,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         // oauth2 인증용 설정이다.
         this.oauthConfigure(http);
 
+
+
         /* ===중요=== */
         // 리소스 서버와 인증 서버가 같이 동작시(리소스 서버 설정, 인증 서버 설정 동시 존재)시
-        // "/oauth/check_token", "/oauth/token" 등 꼭 인증되어야 하기 때문에 아래와 같은 설정을 해야한다.
+        // "/oauth/check_token", "/oauth/token" 등 꼭 인증(header Authorization basic)되어야 하기 때문에 아래와 같은 설정을 해야한다.
+        // 이게 존재해야 http basic 인증에 대한 exception 처리를 WebSecurityConfig 에서 핸들링 할 수 있다.
         // 기본 설정이다.
-        http.authorizeRequests().antMatchers("/oauth/*").authenticated();
+
 
         // 인증이 무조건 필요한 리소스를 등록한다.
         // http.authorizeRequests().antMatchers("/authrequried").authenticated();
@@ -188,7 +201,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //http.authorizeRequests().antMatchers("/test").permitAll(); // /test 에 대해서는 인증 필요 없음
         //http.authorizeRequests().anyRequest().authenticated(); //모든 요청이 인증되어야 한다.
         http.authorizeRequests().antMatchers("/test").permitAll();
-        http.authorizeRequests().anyRequest().permitAll();
+
+
+        /* 변경하지마라. 모든 인증요청에 대해서는 인증되어야 한다. */
+        http.authorizeRequests().anyRequest().authenticated();
+
+
         //http.authorizeRequests().anyRequest().authenticated();
 
 
@@ -285,6 +303,29 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 // 여기 나오는 sso.filter 빈은 다음장에서 작성합니다.
                 // 이 장에서 실행을 확인하시려면 당연히 NPE 오류가 나니 아래 소스에 주석을 걸어주시기 바랍니다.
                 .addFilterBefore((Filter)context.getBean("sso.filter"), BasicAuthenticationFilter.class);
+        */
+
+       /*접근제어 예제*/
+        /*
+        http
+                // Since we want the protected resources to be accessible in the UI as well we need
+                // session creation to be allowed (it's disabled by default in 2.0.6)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .and()
+                .requestMatchers().antMatchers("/photos/**", "/oauth/users/**", "/oauth/clients/**","/me")
+                .and()
+                .authorizeRequests()
+                .antMatchers("/me").access("#oauth2.hasScope('read')")
+                .antMatchers("/photos").access("#oauth2.hasScope('read') or (!#oauth2.isOAuth() and hasRole('ROLE_USER'))")
+                .antMatchers("/photos/trusted/**").access("#oauth2.hasScope('trust')")
+                .antMatchers("/photos/user/**").access("#oauth2.hasScope('trust')")
+                .antMatchers("/photos/**").access("#oauth2.hasScope('read') or (!#oauth2.isOAuth() and hasRole('ROLE_USER'))")
+                .regexMatchers(HttpMethod.DELETE, "/oauth/users/([^/].*?)/tokens/.*")
+                .access("#oauth2.clientHasRole('ROLE_CLIENT') and (hasRole('ROLE_USER') or #oauth2.isClient()) and #oauth2.hasScope('write')")
+                .regexMatchers(HttpMethod.GET, "/oauth/clients/([^/].*?)/users/.*")
+                .access("#oauth2.clientHasRole('ROLE_CLIENT') and (hasRole('ROLE_USER') or #oauth2.isClient()) and #oauth2.hasScope('read')")
+                .regexMatchers(HttpMethod.GET, "/oauth/clients/.*")
+                .access("#oauth2.clientHasRole('ROLE_CLIENT') and #oauth2.isClient() and #oauth2.hasScope('read')");
         */
     }
 
