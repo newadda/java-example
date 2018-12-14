@@ -1,0 +1,121 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.3.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url 'https://repo.spring.io/libs-snapshot' }
+        maven {
+            url "http://maven.springframework.org/milestone"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE")
+    }
+}
+
+
+plugins {
+    id 'java'
+    id 'eclipse'
+    id 'idea'
+    id 'org.springframework.boot' version '2.0.3.RELEASE'  // bootjar 가능
+    id 'io.spring.dependency-management' version '1.0.5.RELEASE' // sprint-boot 의 의존성 관리
+    id 'war' // generate war file
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+version 'unspecified'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
+}
+
+configurations {
+    compile.exclude module: 'spring-boot-starter-logging' // compile configuration에서 특정 모듈 제외
+
+    //  compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging' // compile configuration에서 특정 그룹의 특정 모듈 제외
+    // all*.exclude group: 'org.gradle.test.excludes', module: 'reports' // 모든 configuration에서 특정 모듈 제외
+}
+
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+
+
+
+    // ===== Spring =====
+    compile("org.springframework.boot:spring-boot-starter:2.0.3.RELEASE")
+
+
+    compile("org.springframework.boot:spring-boot-starter-web:2.0.3.RELEASE")
+            {
+                // log4j2 사용을 위해 logback 은 제외시킴
+                //   exclude group:'ch.qos.logback'
+                // exclude group:'org.slf4j', module: 'slf4j-log4j12'
+                exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+                //  exclude group:'org.springframework.boot:spring-boot-starter-logging'
+            }
+
+    // ------ [web]web 을 위해서 필요 -------
+    // Tomcat embeded container , war 생성시 providedRuntime 사용, jar 생성시 complie 사용
+    //compile("org.springframework.boot:spring-boot-starter-tomcat") // war 생성시 주석처리, jar 생성시 필요
+    //providedRuntime("org.springframework.boot:spring-boot-starter-tomcat") //jar 생성시 주석처리
+
+    // JSTL tag lib
+    compile("javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:1.2.2")
+    compile("org.apache.taglibs:taglibs-standard-impl:1.2.5")
+
+    // JSTL for JSP
+    compile("javax.servlet.jsp.jstl:jstl:1.2")
+
+    // Need this to compile JSP
+    // jar 를 바로 실행 할때는 필요하다. 하지만 war 로 돌릴때는 빼야한다.
+    compile ("org.apache.tomcat.embed:tomcat-embed-jasper:9.0.10")
+
+    // Need this to compile JSP,
+    //			tomcat-embed-jasper version is not working, no idea why
+    compile("org.eclipse.jdt.core.compiler:ecj:4.6.1")
+
+    // Spring Security
+    compile('org.springframework.boot:spring-boot-starter-security:2.0.3.RELEASE')
+    compile('org.springframework.security.oauth:spring-security-oauth2:2.3.3.RELEASE')
+
+    // Log 시스템을 기본 logback 에서 log4j2 로 바꾼다.
+    //  compile('org.springframework.boot:spring-boot-starter-log4j2:2.0.3.RELEASE')
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.8.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.8.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.8.2'
+
+
+
+
+    // ===================
+
+    // Vibur 란 DBCP
+    compile group: 'com.googlecode.concurrentlinkedhashmap', name: 'concurrentlinkedhashmap-lru', version: '1.4.2'
+    compile group: 'org.vibur', name: 'vibur-dbcp', version: '19.1'
+
+    // mysql - jdbc
+    compile('org.springframework.boot:spring-boot-starter-jdbc:2.0.3.RELEASE')
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
+}
+
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.9'
+}

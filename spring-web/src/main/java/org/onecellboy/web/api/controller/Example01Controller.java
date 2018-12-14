@@ -152,11 +152,22 @@ public class Example01Controller extends  AbstractController{
 
     @RequestMapping(value = {"test3/{id}"},method = RequestMethod.GET,produces = {"application/json"}/*,headers={"name=pankaj", "id=1"}*/)
     @ResponseBody
-    public String test2(@Validated @ModelAttribute  Test test,BindingResult result2,@Validated @ModelAttribute  Test2 test3,BindingResult result,
+    public String test2(@Validated @ModelAttribute  Test test1,BindingResult result2,@Validated @ModelAttribute  Test2 test3,BindingResult result,
                         HttpServletRequest request, HttpServletResponse response)
     {
 
-        String code = result2.getAllErrors().iterator().next().getCode();
+        ObjectError next = result2.getAllErrors().iterator().next();
+        String objectName = next.getObjectName();
+        Object[] arguments = next.getArguments();
+        String code = next.getCode();
+
+        FieldError fieldError = result2.getFieldError();
+        String field = fieldError.getField();
+        String code1 = fieldError.getCode();
+        Object rejectedValue = fieldError.getRejectedValue();
+        Object[] arguments1 = fieldError.getArguments();
+
+
         Test t = new Test();
         t.p="asdf";
         result2.rejectValue("p","org.onecellboy.common.spring.validation.phone.message","{org.onecellboy.common.spring.validation.phone.message}");

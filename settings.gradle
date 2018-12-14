@@ -17,4 +17,5 @@ include 'akka-example'
 include 'spring-di'
 include 'spring-db'
 // "services:webservice"
+include 'spring-security'
 
