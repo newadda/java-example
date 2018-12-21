@@ -33,6 +33,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -124,17 +125,17 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
         //  ==== 만약 인증서버 한대에 서로 다른 리소스 서버가 있을 경우 Resource ID를 통해 분류가능하다.
         //resources.resourceId()
-        resources.authenticationEntryPoint(new AuthenticationEntryPoint() {
+       /* resources.authenticationEntryPoint(new AuthenticationEntryPoint() {
             @Override
             public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
             }
-        });
+        });*/
 
 
         // ===== Exception Handling ====
-        // access token 실패시 (resource 접근시 header Authorization 실패시) 여기서 핸들링한다.
-        // 또한 /oauth/* 에서 Header Authorization Basic 의 실패도 여기서 받을 수 있다. 이경우 Authorization 헤더가 존재할 때이다.
+        // 1. resource 접근에 대한 access token 실패시 (resource 접근시(/oauth/*는 제외) header Authorization 실패시, header 에 Authorization 없을 시) 여기서 핸들링한다. 즉 인증실패시
+        // 2. /oauth/* 에서 Header Authorization Basic 의 인증실패도 여기서 받을 수 있다. 이경우 Authorization 헤더가 존재할 때이다. Authorization 헤더가 존재하지 않는 에러에 대해서는 이곳에서 처리하지 않는다,.
         //resources.authenticationEntryPoint();
 
         //  access token 은 존재하나 scope, role 등 권한 위반시

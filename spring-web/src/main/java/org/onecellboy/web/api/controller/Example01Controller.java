@@ -18,12 +18,16 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.onecellboy.web.api.response.error.ApiError;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,8 +39,10 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.DataFormatException;
 
 @RestController
+
 @Validated
 public class Example01Controller extends  AbstractController{
 
@@ -155,6 +161,10 @@ public class Example01Controller extends  AbstractController{
     public String test2(@Validated @ModelAttribute  Test test1,BindingResult result2,@Validated @ModelAttribute  Test2 test3,BindingResult result,
                         HttpServletRequest request, HttpServletResponse response)
     {
+        User activeUser
+                = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
 
         ObjectError next = result2.getAllErrors().iterator().next();
         String objectName = next.getObjectName();
@@ -182,8 +192,19 @@ public class Example01Controller extends  AbstractController{
     @ResponseBody
     public String authRequried()
     {
+        User activeUser
+                = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return "test";
     }
+
+    @RequestMapping(value = {"error11"},method = RequestMethod.GET,produces = {"application/json"}/*,headers={"name=pankaj", "id=1"}*/)
+    @ResponseBody
+    public String err() throws Exception
+    {
+        throw  new DataFormatException();
+        //return "err";
+    }
+
 
 
     public  class Test{

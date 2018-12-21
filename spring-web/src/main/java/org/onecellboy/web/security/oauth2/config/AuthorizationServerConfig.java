@@ -31,6 +31,8 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -160,8 +162,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authenticationManager(authenticationManager); // grant_type : password 를 위해서는 AuthenticationManager를 등록해야 한다.
                 //.userDetailsService(); // refresh_token 을 하기 위해서는 UserDetailsService를 꼭 등록해야한다.
 
-        /* // oauth2 관련 exception 처리 핸들링 법 , 일단 기본인증 성공 (header Authorization 은 성공한 상태일때) 후 token이나 권한 실패일때
-        // 다시 말하지만 /oauth/* 에 대한 header Authorization 실패에 대한 핸들링은 아니다.
+        /* // oauth2 관련 exception 처리 핸들링 법 , 일단 기본클라이언트인증 성공 (header Authorization Basic 은 성공한 상태일때) 후 token이나 권한 실패일때
+        // 다시 말하지만 /oauth/* 에 대한 header Authorization Basic 인증실패(기본인증)에 대한 핸들링은 아니다.
         .exceptionTranslator(exception -> {
             if (exception instanceof OAuth2Exception) {
                 OAuth2Exception oAuth2Exception = (OAuth2Exception) exception;
@@ -173,6 +175,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
             }
         });
         */
+
+
     }
 
 

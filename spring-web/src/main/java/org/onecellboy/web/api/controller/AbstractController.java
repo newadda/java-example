@@ -19,7 +19,7 @@ import javax.validation.ConstraintViolationException;
  */
 public class AbstractController {
 
-
+/*
     @ResponseBody
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler({MissingServletRequestParameterException.class})
@@ -30,7 +30,7 @@ public class AbstractController {
         error.setMessage(e.getMessage());
         return error;
     }
-
+*/
 
     @ResponseBody
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
@@ -42,7 +42,9 @@ public class AbstractController {
         return error;
     }
 
+
     @ResponseBody
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler({Exception.class})
     public ApiError ExceptionHandling(Exception e, WebRequest request)
     {
@@ -63,16 +65,6 @@ public class AbstractController {
     }
 
 
-    @ResponseBody
-    @ExceptionHandler({ConstraintViolationException.class})
-    public ApiError RuntimeExceptionHandling(ConstraintViolationException e, WebRequest request)
-    {
-
-        ApiError error = new ApiError();
-        error.setStatus(402);
-        error.setMessage(e.getMessage());
-        return error;
-    }
 
 
 }

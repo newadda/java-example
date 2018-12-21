@@ -24,15 +24,6 @@ public class RestExceptionHandler {
      * @return
      */
 
-    @ResponseBody
-    @ExceptionHandler({MissingServletRequestParameterException.class})
-    public ApiError MissingServletRequestParameterExceptionHandling(Exception e, WebRequest request)
-    {
-        ApiError error = new ApiError();
-        error.setStatus(444);
-        error.setMessage(e.getMessage());
-        return error;
-    }
 
 
     @ResponseBody

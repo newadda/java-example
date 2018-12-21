@@ -11,6 +11,13 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Basic Auth
@@ -144,9 +151,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         ////  정의하지 않으면 기본 접근 제어는 다 허용이다. 하나씩 막는 개념이다.
 
-       /* @EnableResourceServer 없다면 이곳에서 httpBasic 인증(Header Authorization basic)
-       /* 즉 Oauth2 의 client 인증(Header Authorization basic) 실패에 대한 Handling 을 할 수 있다.*/
+        // 이곳에서 접근제어 확인 후 그 후에 @EnableResourceServer 에서 접근제어 처리한다.
+        // 때문에 이곳에서는 모든 URI에 대해 permitAll()하였다.
         http.authorizeRequests().anyRequest().permitAll();
+
+       /* @EnableResourceServer 어노테이션 설정이 없다면 이곳에서 httpBasic 인증(Header Authorization basic)
+       /* 즉 Oauth2 의 client 인증(Header Authorization basic) 실패에 대한 Handling 을 할 수 있다.*/
+       /*
+        http.exceptionHandling().authenticationEntryPoint(new AuthenticationEntryPoint() {
+            @Override
+            public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+
+            }
+        });*/
+
+
         /// oauth2 인증 설정
         this.oauthConfigure(http);
 

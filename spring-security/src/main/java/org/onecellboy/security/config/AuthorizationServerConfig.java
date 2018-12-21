@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -16,9 +17,14 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
+import org.springframework.security.web.AuthenticationEntryPoint;
 
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.io.IOException;
 
 /**
  * AuthorizationServerConfigurerAdaper 는 Oauth2 의 클라이언트 인증을 담당한다.
@@ -137,12 +143,12 @@ public class AuthorizationServerConfig  extends AuthorizationServerConfigurerAda
                 .authenticationManager(authenticationManager) // grant_type : password 를 위해서는 AuthenticationManager를 등록해야 한다.
                 .userDetailsService(userDetailsService) // refresh_token 을 하기 위해서는 UserDetailsService를 꼭 등록해야한다.
 
-         // oauth2 exception 처리 핸들링 법
+         // oauth2 exception 기본 처리 핸들링 법
         .exceptionTranslator(new CustomOauthExceptionTranslator()
             );
 
-             /* // oauth2 관련 exception 처리 핸들링 법 , 일단 기본인증 성공 (header Authorization 은 성공한 상태일때) 후 token이나 권한 실패일때
-        // 다시 말하지만 /oauth/* 에 대한 header Authorization 실패에 대한 핸들링은 아니다.
+            /* // oauth2 관련 exception 처리 핸들링 법 , 일단 기본 클라이언트인증 성공 (header Authorization Basic 은 성공한 상태일때) 후 token이나 권한 실패일때
+        // 다시 말하지만 /oauth/* 에 대한 header Authorization Basic 인증실패(기본인증)에 대한 핸들링은 아니다.
         .exceptionTranslator(exception -> {
             if (exception instanceof OAuth2Exception) {
                 OAuth2Exception oAuth2Exception = (OAuth2Exception) exception;

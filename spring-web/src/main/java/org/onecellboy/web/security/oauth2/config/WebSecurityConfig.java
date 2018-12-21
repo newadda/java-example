@@ -168,7 +168,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
        /* @EnableResourceServer 없다면 이곳에서 httpBasic 인증(Header Authorization basic)
        /* 즉 Oauth2 의 client 인증(Header Authorization basic) 실패에 대한 Handling 을 할 수 있다.*/
-   http.authorizeRequests().anyRequest().permitAll();
+   http.authorizeRequests().anyRequest().authenticated();
+
+
         /// oauth2 인증 설정
        this.oauthConfigure(http);
 
