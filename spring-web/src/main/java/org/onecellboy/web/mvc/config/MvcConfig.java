@@ -49,7 +49,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
-       resolvers.add(0,new RestResponseStatusExceptionResolver());
+       //resolvers.add(0,new RestResponseStatusExceptionResolver());
         //resolvers.add(new RestResponseStatusExceptionResolver());
 
         Properties p =new Properties();
@@ -59,7 +59,7 @@ public class MvcConfig implements WebMvcConfigurer {
         simpleMappingExceptionResolver.setOrder(1);
 
 
-        resolvers.add(simpleMappingExceptionResolver);
+      //  resolvers.add(simpleMappingExceptionResolver);
     }
 
     @Override
@@ -79,19 +79,22 @@ public class MvcConfig implements WebMvcConfigurer {
         return resolver;
     }
 
-   @Bean
+    @Bean
     public LocalValidatorFactoryBean validator() {
         LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();
-        validatorFactoryBean.setValidationMessageSource(getBundle());
+        validatorFactoryBean.setValidationMessageSource(messageSource());
         return validatorFactoryBean;
     }
 
-
-    public ReloadableResourceBundleMessageSource getBundle(){
+    @Bean
+    public ReloadableResourceBundleMessageSource messageSource(){
         ReloadableResourceBundleMessageSource bundle = new ReloadableResourceBundleMessageSource();
-        bundle.setBasenames("classpath:/ValidationMessages","classpath:/org/onecellboy/common/spring/ValidationMessages");
+        // classpath:/ValidationMessages : 기본 , classpath:/org/onecellboy/common/spring/ValidationMessages : custom
+        bundle.setBasenames("classpath:/ValidationMessages","classpath:/org/one/lib/ValidationMessages","classpath:/org/waterworks/lib/ValidationMessages");
+        bundle.setDefaultEncoding("UTF-8");
         return bundle;
     }
+
 
 
     @Override

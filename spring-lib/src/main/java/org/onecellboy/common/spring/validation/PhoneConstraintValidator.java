@@ -14,7 +14,6 @@ public class PhoneConstraintValidator  extends AbstructConstraintValidator<Phone
     @Override
     public void initialize(Phone constraintAnnotation) {
 
-
     }
 
     @Override

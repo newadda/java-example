@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.zip.DataFormatException;
 
-@RestControllerAdvice
+//@RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler  {
 
     @ResponseStatus(HttpStatus.CONFLICT)  // 409
@@ -28,7 +28,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler  {
 
 
     @ResponseStatus(HttpStatus.CONFLICT)  // 409
-    @ExceptionHandler({DataFormatException.class,RuntimeException.class})
+    @ExceptionHandler({DataFormatException.class,RuntimeException.class,Exception.class})
     private ResponseEntity< String > error2(final Exception exception, final HttpStatus httpStatus, final String logRef) {
 
         return new ResponseEntity < > (new String( ""), httpStatus);

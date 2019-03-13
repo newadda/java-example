@@ -202,7 +202,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //http.authorizeRequests().antMatchers("/test").permitAll(); // /test 에 대해서는 인증 필요 없음
         //http.authorizeRequests().anyRequest().authenticated(); //모든 요청이 인증되어야 한다.
         http.authorizeRequests().antMatchers("/test**/*").permitAll();
-
+        http.authorizeRequests().antMatchers("/test**/**").permitAll();
+        http.authorizeRequests().antMatchers("/test3/**").permitAll();
 
         /* 변경하지마라. 모든 인증요청에 대해서는 인증되어야 한다. */
         http.authorizeRequests().anyRequest().authenticated();

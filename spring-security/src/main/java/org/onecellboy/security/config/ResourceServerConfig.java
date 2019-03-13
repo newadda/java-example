@@ -50,7 +50,7 @@ import java.io.IOException;
  *          리소스 서버에서만 필요
  * */
 @Configuration
-@EnableResourceServer
+@EnableResourceServer  //@PreAuthorize, @PostAuthorize Annotation 을 Oauth2에 대해 사용하려면 꼭 존재해야한다.
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
@@ -116,15 +116,15 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 
         // ===== Exception Handling ====
-        // 1. resource 접근( /oauth/*는 제외,/oauth/*는 resource 가 아니다. )에 대한 access token 인증실패 시, 즉 header Authorization 가 존재하나 잘못된 access token 일 때, header 에 Authorization 가 존재하지 않을 시) 여기서 핸들링한다. 즉 인증실패시
-        // 2. /oauth/* 에서 Header Authorization Basic 의 인증실패도 여기서 받을 수 있다. 이경우 Authorization 헤더가 존재할 때이다.
-        // 3. /oauth/* 경로에서 Authorization 헤더가 존재하지 않는 에러에 대해서는 이곳에서 처리하지 않는다. ErrorController로 처리해야 한다.
+        // 1. resource 접근에 대한 access token 실패시 (resource 접근시(/oauth/*는 제외) header Authorization 실패시, header 에 Authorization 없을 시) 여기서 핸들링한다. 즉 인증실패시
+        // 2. /oauth/* 에서 Header Authorization Basic 의 인증실패도 여기서 받을 수 있다. 이경우 Authorization 헤더가 존재할 때이다. Authorization 헤더가 존재하지 않는 에러에 대해서는 이곳에서 처리하지 않는다,.
+        // http status 401
         //resources.authenticationEntryPoint();
 
         //  access token 은 존재하나 scope, role 등 권한 위반시
+        // http status 403
         //  resources.accessDeniedHandler();
         //  ===============================
-
 
 
     }

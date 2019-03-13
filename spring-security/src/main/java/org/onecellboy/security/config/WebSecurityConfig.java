@@ -129,6 +129,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      *
      * 쉽게 생각해서 접근제어에 매칭이 되면 그 다음 접근제어는 무시된다는 것이다.
      *
+     * 위의 선언은 순서대로 진행된다.
+     *
      * Spring.Oauth2 에서의 ResourceServerConfigurerAdapter 에서의 접근제어와 차이가 무엇이냐면
      *
      * ResourceServerConfigurerAdapter 에서의 접근제어는 oauth2 기반 접근제어이고

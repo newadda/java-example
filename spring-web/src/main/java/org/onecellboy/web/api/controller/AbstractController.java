@@ -2,6 +2,7 @@ package org.onecellboy.web.api.controller;
 
 import org.onecellboy.common.spring.validation.PhoneConstraintValidator;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,7 +20,7 @@ import javax.validation.ConstraintViolationException;
  */
 public class AbstractController {
 
-/*
+
     @ResponseBody
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler({MissingServletRequestParameterException.class})
@@ -30,7 +31,7 @@ public class AbstractController {
         error.setMessage(e.getMessage());
         return error;
     }
-*/
+
 
     @ResponseBody
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})

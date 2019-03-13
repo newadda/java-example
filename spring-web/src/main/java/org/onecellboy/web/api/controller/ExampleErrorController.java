@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
 
-@RestController
+//@RestController
 public class ExampleErrorController  implements ErrorController {
     @RequestMapping(value="/error", produces = {"application/xml"}/*,headers={"name=pankaj", "id=1"}*/)
     @ResponseBody
