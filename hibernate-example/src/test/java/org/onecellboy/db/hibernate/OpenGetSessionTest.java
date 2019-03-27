@@ -32,6 +32,11 @@ public class OpenGetSessionTest {
 
     }
 
+    /**
+     * openSession() 은 새로운 세션을 반환한다.
+     * getCurrentSession() 은 쓰레드당 동일한 하나의 세션을 반환한다. 두번 세번 호출해도 동일한 세션을 반환한다.
+     * 하지만 세션을 닫으면 또 다른 세션을 반환한다. 중요한 것은 쓰레드에 동일한 세션을 반환한다는 것
+     */
     @Test
     public void test()
     {
