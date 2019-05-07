@@ -14,6 +14,7 @@ import org.springframework.validation.MessageCodesResolver;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -176,5 +177,26 @@ public class MvcConfig implements WebMvcConfigurer {
         ((AcceptHeaderLocaleResolver) localeResolver).setDefaultLocale(Locale.KOREA);
         return  localeResolver;
     }
+
+
+
+    /**
+     * Multipart Resolver Config
+     * @return
+     */
+    @Bean
+    public CommonsMultipartResolver multipartResolver()
+    {
+        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
+        /* 최대 업로드 가능한 바이트 크기, -1 제한없음, 기본 값 -1*/
+        commonsMultipartResolver.setMaxUploadSize(-1);
+        /* 디스크에 임시 파일을 생성하기 전에 메모리에 보관할 수 있는 최대 바이트 크기, 기본값은 10240*/
+        commonsMultipartResolver.setMaxInMemorySize(10240);
+        /* 파싱할 때 사용할 캐릭터 인코딩, 지정하지 않은 경우 httpServletRequest.setEncording()메서드로 지정한 캐릭터 셋 사용, 아무 값도 없을 경우 ISO-//59-1 사용 */
+        // commonsMultipartResolver.setDefaultEncoding();
+
+        return commonsMultipartResolver;
+    }
+
 
 }
