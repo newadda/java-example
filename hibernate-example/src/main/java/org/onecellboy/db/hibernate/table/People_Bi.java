@@ -18,6 +18,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
 
 @Entity
@@ -33,11 +36,11 @@ public class People_Bi {
 	private String name;
 
 	
-	@OneToOne(fetch=FetchType.LAZY,mappedBy="people", cascade = CascadeType.ALL)
+	@OneToOne(fetch=FetchType.EAGER,mappedBy="people", cascade = CascadeType.ALL)
 	private People_Info_Bi people_Info;
 	
 	
-	@OneToMany(fetch=FetchType.LAZY,mappedBy="owner_people", cascade = CascadeType.ALL,orphanRemoval=true)
+	@OneToMany(fetch=FetchType.EAGER,mappedBy="owner_people", cascade = CascadeType.ALL,orphanRemoval=true)
 	//@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
 	//@JoinColumn(name="PHONE_OWNER_ID",referencedColumnName="PEOPLE_ID")
 	private List<Phone_Bi> phones = new LinkedList<Phone_Bi>();

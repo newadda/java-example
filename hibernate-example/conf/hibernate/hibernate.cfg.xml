@@ -5,10 +5,10 @@
     <hibernate-configuration>
         <session-factory>
             <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-            <property name="hibernate.connection.password">dbapassword</property>
-            <property name="hibernate.connection.url">jdbc:mysql://192.168.0.49:3306/DB_TEST?useSSL=false&amp;characterEncoding=UTF-8</property>
+            <property name="hibernate.connection.password">shh</property>
+            <property name="hibernate.connection.url">jdbc:mysql://192.168.1.3:3306/DB_TEST?useSSL=false&amp;characterEncoding=UTF-8</property>
             <property name="hibernate.default_schema">DB_TEST</property>
-            <property name="hibernate.connection.username">dba</property>
+            <property name="hibernate.connection.username">shh</property>
             
             <property name="hibernate.connection.CharSet">UTF-8</property>
             <property name="hibernate.connection.characterEncoding">UTF-8</property>

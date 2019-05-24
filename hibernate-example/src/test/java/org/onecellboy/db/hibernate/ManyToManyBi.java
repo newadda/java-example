@@ -3,6 +3,7 @@ package org.onecellboy.db.hibernate;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,6 +17,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onecellboy.db.hibernate.table.Club_Bi;
 import org.onecellboy.db.hibernate.table.People_Bi;
+import org.onecellboy.db.hibernate.table.People_Info_Bi;
+import org.onecellboy.db.hibernate.table.Phone_Bi;
 
 public class ManyToManyBi {
 
@@ -121,7 +124,13 @@ public class ManyToManyBi {
 		
 		people1 = session.get(People_Bi.class, temp_id1);
 		people2 = session.get(People_Bi.class, temp_id2);
-		
+
+		//List from_people_bi = session.createQuery("SELECT b FROM People_Bi b left join fetch b.people_Info").getResultList();
+	/*	List<People_Bi> from_people_bi = session.createQuery("SELECT b FROM People_Bi b where b.id >30").getResultList();
+		People_Info_Bi people_info = from_people_bi.get(0).getPeople_Info();
+		List<Phone_Bi> phones = from_people_bi.get(0).getPhones();
+		*/
+
 		// people1 은 club 과의 관계가 없다. 양방향 관계인데 양방향에서 관계를 설정하지 않았지 때문..
 		System.out.println("people1 club size = "+ people1.getClubs().size());
 		
