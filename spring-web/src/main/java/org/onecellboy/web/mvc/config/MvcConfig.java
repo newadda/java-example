@@ -42,6 +42,10 @@ import java.util.TimeZone;
 @EnableAutoConfiguration
 @EnableWebMvc
 public class MvcConfig implements WebMvcConfigurer {
+
+
+
+
     /**
      * Make sure dates are serialised in
      * ISO-8601 format instead as timestamps
@@ -145,6 +149,10 @@ public class MvcConfig implements WebMvcConfigurer {
     /**
      * 메세지 소스의 경로를 이것저것 추가하기 위해서 사용
      * "classpath:/ValidationMessages" 는 기본경로이다.
+     * "classpath:/org/hibernate/validator/ValidationMessages" 은 하이퍼네이트 validationMessages 여서 추가했다.
+     *
+     * properties 의 key 가 겹칠 경우 먼저 적용된 파일의 key와 value를 사용한다.
+     *
      * @return
      */
     @Bean
@@ -158,7 +166,12 @@ public class MvcConfig implements WebMvcConfigurer {
     }
 
 
-
+    /**
+     * Spring 의 deafult Validator를 설정한다.
+     * 이것을 오버라이드 하지 않으면 javax.validation.Validator를 사용한다.
+     * @return
+     */
+    @Bean
     @Override
     public Validator getValidator() {
         return validator();
