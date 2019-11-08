@@ -53,6 +53,8 @@ public class PersistenceConfig {
 
         dataSource.setStatementCacheMaxSize(200);
 
+        dataSource.setDefaultAutoCommit(false); // autocommit을 false로 해야 트랜잭션 문제시 rollback 된다.
+
         dataSource.start();
 
         return dataSource;
