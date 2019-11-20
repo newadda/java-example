@@ -28,6 +28,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import javax.servlet.ServletException;
 import javax.validation.Validation;
 import java.util.List;
 import java.util.Locale;
@@ -75,7 +76,7 @@ public class MvcConfig implements WebMvcConfigurer {
      * @return
      */
     @Bean
-    public CommonsRequestLoggingFilter logFilter() {
+    public CommonsRequestLoggingFilter logFilter() throws ServletException {
         CommonsRequestLoggingFilter filter
                 = new CommonsRequestLoggingFilter();
         filter.setIncludeQueryString(true);
@@ -83,7 +84,9 @@ public class MvcConfig implements WebMvcConfigurer {
         filter.setIncludeClientInfo(true);
         filter.setMaxPayloadLength(10000);
         filter.setIncludeHeaders(false);
-        filter.setAfterMessagePrefix("REQUEST DATA : ");
+        filter.setBeforeMessagePrefix("REQUEST : ");
+        filter.setAfterMessagePrefix("RESPONSE : ");
+        filter.afterPropertiesSet();
         return filter;
     }
 
