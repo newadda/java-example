@@ -65,11 +65,20 @@ It will look like that:
     <AppenderRef ref="RollingFile"/>
   </Logger>
    -->
-   <Logger name="org.hibernate" level="WARN" additivity="false">
-  
-  </Logger>
 
-  <Root level="TRACE">
+
+     <!-- hibernate SQL DML 문장보기 -->
+     <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+         <appender-ref ref="console"/>
+     </logger>
+     <!-- hibernate JDBC 파라미터보기 trace 는 되어야 보인다. -->
+     <logger name="org.hibernate.type" level="trace" additivity="false">
+         <appender-ref ref="console"/>
+     </logger>
+
+
+
+     <Root level="TRACE">
        <!-- Logger 설정          -->
       <AppenderRef ref="console"/>
        <!-- <AppenderRef ref="RollingFile"/>-->
