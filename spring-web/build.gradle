@@ -174,9 +174,18 @@ repositories {
 bootJar {
     baseName = 'module-web'
     version =  '0.1.0'
+    enabled = true
 }
+
 */
 task wrapper(type: Wrapper) {
     gradleVersion = '4.9'
 }
 
+/* war 설정 */
+/*
+bootWar {
+    baseName = 'module-web-war'
+    version = '0.0.1-SNAPSHOT'
+}
+*/

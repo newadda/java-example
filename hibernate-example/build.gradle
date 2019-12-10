@@ -1,13 +1,29 @@
-// Apply the java-library plugin to add support for Java Library
-apply plugin: 'java-library'
-apply plugin: 'eclipse'
-apply plugin: 'eclipse-wtp' 
+
+
+plugins {
+    // Apply the java-library plugin to add support for Java Library
+    id 'java'
+    id 'java-library'
+    id 'com.ewerk.gradle.plugins.querydsl' version "1.0.10" //querydsl 플러그인
+    //id 'org.springframework.boot' version '2.2.1.RELEASE'
+}
+
 
 // In this section you declare where to find the dependencies of your project
 repositories {
+
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
+
+    maven {
+        url "https://repo.boundlessgeo.com/main/"
+    }
+
+
 }
 
 
@@ -35,12 +51,20 @@ dependencies {
     compile fileTree(dir: 'libs/hibernate/optional/infinispan', include: ['*.jar'])
     compile fileTree(dir: 'libs/hibernate/optional/proxool', include: ['*.jar'])
     compile fileTree(dir: 'libs/hibernate/optional/c3p0', include: ['*.jar'])
+
+    //compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.9.Final'
+    //compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.4.3.Final'
+    compile group: 'org.hibernate', name: 'hibernate-spatial', version: '5.4.9.Final'
+
     
      //vibur
     compile group: 'com.googlecode.concurrentlinkedhashmap', name: 'concurrentlinkedhashmap-lru', version: '1.4.2'
     compile group: 'org.vibur', name: 'vibur-dbcp', version: '19.1'
     compile group: 'org.vibur', name: 'vibur-object-pool', version: '19.1'
     compile group: 'org.vibur', name: 'vibur-dbcp-hibernate5', version: '19.1'
+
+    // Apache DBCP
+    compile group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.7.0'
     
     // mysql jdbc
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.43'
@@ -54,8 +78,21 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-ext', version: '1.7.25'
 
 
-    // spring ORM
+    // spring ORM, hibernate 와 spring 연동
     compile group: 'org.springframework', name: 'spring-orm', version: '5.0.9.RELEASE'
+    // page 사요을 위해
+    compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.2.3.RELEASE'
+
+
+    // QueryDSL
+    compile group: 'com.querydsl', name: 'querydsl-jpa', version: '4.2.2'
+    compile group: 'com.querydsl', name: 'querydsl-apt', version: '4.2.2'
+    compile group: 'com.querydsl', name: 'querydsl-core', version: '4.2.2'
+    compile group: 'com.querydsl', name: 'querydsl-sql', version: '4.2.2'
+    compile group: 'com.querydsl', name: 'querydsl-sql-spatial', version: '4.2.2'
+    compile group: 'com.querydsl', name: 'querydsl-sql-spring', version: '4.2.2'
+
+
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -69,3 +106,76 @@ ext { gradleVersion= '2.1' //자신이 원하는 Gradle 버전에 맞춰 변경
 task wrapper(type: Wrapper) {
  gradleVersion = "$gradleVersion"
  }
+
+
+
+// QueryDSL QClass 생성 gradle 5이상 설정, task other:compileQuerydsl 실행
+def queryDslOutput = file("src-gen/main/java")
+
+querydsl {
+    library = "com.querydsl:querydsl-apt"
+    jpa=true
+    querydslSourcesDir = queryDslOutput
+
+}
+
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations{
+    querydsl.extendsFrom compileClasspath
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "src-gen/main/java"
+        }
+    }
+}
+
+
+/*
+// QueryDSL QClass 생성 gradle 5이하 설정, task other:compileQuerydsl 실행
+def queryDslOutput = file("src-gen/main/java")
+
+sourceSets {
+    main {
+        java {
+            srcDir "src-gen/main/java"
+        }
+    }
+}
+
+clean {
+    delete queryDslOutput
+}
+
+task generateQueryDSL(type: JavaCompile, group: "build") {
+    doFirst {
+        if (!queryDslOutput.exists()) {
+            logger.info("Creating `$queryDslOutput` directory")
+
+            if (!queryDslOutput.mkdirs()) {
+                throw new InvalidUserDataException("Unable to create `$queryDslOutput` directory")
+            }
+        }
+    }
+
+    source = sourceSets.main.java
+    classpath = configurations.compile
+    options.compilerArgs = [
+            "-proc:only",
+            "-processor",
+            "com.querydsl.apt.jpa.JPAAnnotationProcessor"
+    ]
+    destinationDir = queryDslOutput
+    options.failOnError = false
+}
+
+compileJava {
+    dependsOn generateQueryDSL //이 부분 dependsOn이 generateQueryDSL이다.
+    source generateQueryDSL.destinationDir
+}
+*/

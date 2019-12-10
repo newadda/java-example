@@ -19,4 +19,5 @@ include 'spring-db'
 // "services:webservice"
 include 'spring-security'
 include 'quartz'
+include 'querydsl'
 
