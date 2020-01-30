@@ -226,6 +226,10 @@ public class jobTest {
     }
 
 
+    /**
+     * job 파라미터가 같은 해쉬를 가지면 두번다시는 동일한 실행을 하지 못한다. 따라서 UUID 나 시간등을 주어 Job 파라미터 해쉬값을 바꾸어야 한다.
+     * @throws Exception
+     */
     @Test
     public void duplicationTest() throws Exception {
         DataSource dataSource = getDataSource("jdbc:mysql://192.168.0.92:3306/oauth2?useSSL=false&characterEncoding=utf-8", "com.mysql.cj.jdbc.Driver"
@@ -444,6 +448,10 @@ public class jobTest {
        // jobLauncher.run(test,jobParameters);
 
     }
+
+
+
+
 
 
 
