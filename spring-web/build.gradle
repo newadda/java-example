@@ -47,6 +47,21 @@ configurations {
    // all*.exclude group: 'org.gradle.test.excludes', module: 'reports' // 모든 configuration에서 특정 모듈 제외
 }
 
+// In this section you declare where to find the dependencies of your project
+repositories {
+    // Use jcenter for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+
+    mavenCentral()
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url 'https://repo.spring.io/libs-snapshot' }
+    maven {
+        url "http://maven.springframework.org/milestone"
+    }
+
+}
+
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api 'org.apache.commons:commons-math3:3.6.1'
@@ -153,20 +168,7 @@ dependencies {
 }
 
 
-// In this section you declare where to find the dependencies of your project
-repositories {
-    // Use jcenter for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
 
-    mavenCentral()
-    maven { url "https://repo.spring.io/snapshot" }
-    maven { url 'https://repo.spring.io/libs-snapshot' }
-    maven {
-        url "http://maven.springframework.org/milestone"
-    }
-
-}
 
 
 //apply plugin: "org.springframework.boot" 이게 적용되어 있어야 bootJar 가 실행됨

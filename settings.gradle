@@ -20,4 +20,5 @@ include 'spring-db'
 include 'spring-security'
 include 'quartz'
 include 'querydsl'
+include 'gis'
 
