@@ -21,4 +21,5 @@ include 'spring-security'
 include 'quartz'
 include 'querydsl'
 include 'gis'
+include 'python_script'
 
