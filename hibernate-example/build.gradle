@@ -56,7 +56,8 @@ dependencies {
     //compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.4.3.Final'
     compile group: 'org.hibernate', name: 'hibernate-spatial', version: '5.4.9.Final'
 
-    
+
+    //// DBCP
      //vibur
     compile group: 'com.googlecode.concurrentlinkedhashmap', name: 'concurrentlinkedhashmap-lru', version: '1.4.2'
     compile group: 'org.vibur', name: 'vibur-dbcp', version: '19.1'
@@ -125,15 +126,48 @@ compileQuerydsl{
 
 configurations{
     querydsl.extendsFrom compileClasspath
+    queryDslNativeSql
+}
+
+
+dependencies {
+    queryDslNativeSql "com.querydsl:querydsl-sql-codegen:4.1.4"
+    // queryDslNativeSql  files('libs/ojdbc8-12c.jar')
+}
+
+
+task generateQueryDslNative()  {
+
+    /*
+    queryDslNativeOutput.deleteDir()
+    queryDslNativeOutput.mkdirs()
+
+    ant.taskdef(name: 'generateQueryDslNative', classname: 'com.querydsl.sql.codegen.ant.AntMetaDataExporter', classpath: configurations.queryDslNativeSql.asPath)
+    ant.generateQueryDslNative(
+            jdbcDriver: 'oracle.jdbc.driver.OracleDriver',
+            jdbcUrl: 'jdbc:oracle:thin:@192.168.1.19:1521:orcl',
+            jdbcUser: 'c##shh',
+            jdbcPassword: "c##shh",
+            namePrefix: 'QS',
+            packageName: 'test',
+            schemaPattern: 'C##SHH', // SQLServer 등에서 필요
+            // tableNamePattern: 'WTWS_%', // 특정 테이블만 생성
+            targetFolder: queryDslNativeOutput.getAbsolutePath()
+    )
+    */
 }
 
 sourceSets {
     main {
         java {
-            srcDir "src-gen/main/java"
+            srcDir queryDslOutput
+            srcDir queryDslNativeOutput
         }
     }
 }
+
+
+
 
 
 /*
