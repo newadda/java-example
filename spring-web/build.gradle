@@ -62,6 +62,15 @@ repositories {
 
 }
 
+
+configurations {
+    compile.exclude module: 'spring-boot-starter-logging' // compile configuration에서 특정 모듈 제외
+
+    //  compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging' // compile configuration에서 특정 그룹의 특정 모듈 제외
+    // all*.exclude group: 'org.gradle.test.excludes', module: 'reports' // 모든 configuration에서 특정 모듈 제외
+}
+
+
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api 'org.apache.commons:commons-math3:3.6.1'
@@ -127,6 +136,19 @@ dependencies {
     compile('org.springframework.security.oauth:spring-security-oauth2:2.3.3.RELEASE')
 
 
+    // spring batch core
+    // compile group: 'org.springframework.batch', name: 'spring-batch-core', version: "${springBatchVersion}"
+
+
+    // multipart
+    compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
+
+
+    //Quartz
+    //compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.1'
+    //compile group: 'com.mchange', name: 'c3p0', version: '0.9.5.4'
+    // compile group: 'com.mchange', name: 'mchange-commons-java', version: '0.2.15'
+
 
     // mysql - jdbc
     compile('org.springframework.boot:spring-boot-starter-jdbc:2.0.3.RELEASE')
@@ -177,6 +199,12 @@ bootJar {
     baseName = 'module-web'
     version =  '0.1.0'
     enabled = true
+
+   //MANIFEST.MF 에 설정 추가 , Spring jar 에 포함하지 않고 외부 폴더의 jar파일을 포함시켜야 할 경우
+   manifest {
+        attributes("Class-Path": "libs/jython-standalone-2.7.2.jar", // (1)
+                "Implementation-Version": "${project.version}") // (2)
+    }
 }
 
 */
