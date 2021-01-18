@@ -214,5 +214,12 @@ public class MvcConfig implements WebMvcConfigurer {
         return commonsMultipartResolver;
     }
 
+    /**
+     * CORS Cross-Origin Resource Sharing 설정
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**");
+    }
 
 }
