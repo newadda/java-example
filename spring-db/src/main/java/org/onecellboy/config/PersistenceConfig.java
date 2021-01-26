@@ -105,6 +105,18 @@ public class PersistenceConfig {
                         env.getProperty("hibernate.dialect"));
                 setProperty("hibernate.globally_quoted_identifiers",
                         "true");
+                setProperty("hibernate.hbm2ddl.auto",
+                        "none");
+                setProperty("hibernate.show_sql",
+                        "true");
+                setProperty("hibernate.jdbc.time_zone",
+                        "Asia/Seoul");
+                setProperty("show_sql",
+                        "false");
+                setProperty("format_sql",
+                        "false");
+                setProperty("use_sql_commnets",
+                        "true");
             }
         };
     }
