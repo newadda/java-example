@@ -85,6 +85,8 @@ dependencies {
     compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.2.3.RELEASE'
 
 
+
+
     // QueryDSL
     compile group: 'com.querydsl', name: 'querydsl-jpa', version: '4.2.2'
     compile group: 'com.querydsl', name: 'querydsl-apt', version: '4.2.2'
@@ -129,6 +131,8 @@ configurations{
     queryDslNativeSql
 }
 
+def queryDslNativeOutput = file("src-gen/main/generated-querydslnative")
+
 
 dependencies {
     queryDslNativeSql "com.querydsl:querydsl-sql-codegen:4.1.4"
@@ -156,6 +160,7 @@ task generateQueryDslNative()  {
     )
     */
 }
+
 
 sourceSets {
     main {
