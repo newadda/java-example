@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.MessageCodesResolver;
@@ -213,10 +214,14 @@ public class MvcConfig implements WebMvcConfigurer {
 
     /**
      * CORS Cross-Origin Resource Sharing 설정
-     */
+     * PUT, DELETE까지 다 된다.
+     * */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
+        registry.addMapping("/**")
+                .allowedMethods(HttpMethod.GET.name(),HttpMethod.POST.name(),HttpMethod.PUT.name(),
+                        HttpMethod.DELETE.name(),HttpMethod.OPTIONS.name(),HttpMethod.HEAD.name())
+                //.allowedHeaders("Origin", "X-Requested-With", "Content-Type", "Accept")
+                .allowCredentials(true).maxAge(3600);
     }
-
 }
