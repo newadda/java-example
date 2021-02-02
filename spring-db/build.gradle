@@ -27,6 +27,8 @@ dependencies {
     // Spring JDBC
     compile group: 'org.springframework', name: 'spring-jdbc', version: '5.1.0.RELEASE'
 
+    compile group: 'org.springframework.data', name: 'spring-data-jpa', version: "${springBootVersion}"
+
     // hibernate core
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.3.6.Final'
 
@@ -39,5 +41,17 @@ dependencies {
     // Vibur 란 DBCP
     compile group: 'com.googlecode.concurrentlinkedhashmap', name: 'concurrentlinkedhashmap-lru', version: '1.4.2'
     compile group: 'org.vibur', name: 'vibur-dbcp', version: '19.1'
+
+    // Apache DBCP
+    compile group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.7.0'
+
+    // QueryDSL
+    compile group: 'com.querydsl', name: 'querydsl-jpa', version: '4.3.1'
+    compile group: 'com.querydsl', name: 'querydsl-jdo', version: '4.3.1'
+    compile group: 'com.querydsl', name: 'querydsl-apt', version: '4.3.1'
+    compile group: 'com.querydsl', name: 'querydsl-core', version: '4.3.1'
+    compile group: 'com.querydsl', name: 'querydsl-sql', version: '4.3.1'
+    compile group: 'com.querydsl', name: 'querydsl-sql-spatial', version: '4.3.1'
+    compile group: 'com.querydsl', name: 'querydsl-sql-spring', version: '4.3.1'
 
 }
