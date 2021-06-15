@@ -1,0 +1,258 @@
+
+buildscript {
+    /// 변수 정의
+    ext {
+        springBootStarterVersion = '2.5.0'
+        springVersion = '5.3.7'
+        lombokVersion = '1.18.20'
+        queryDSLVersion = '4.4.0'
+        slf4jVersion = '1.7.25'
+        log4jVersion = '2.14.1'
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootStarterVersion}")
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE"
+
+    }
+}
+
+
+plugins {
+    id 'groovy'
+    id 'java'
+    id 'org.springframework.boot' version '2.5.0' // bootjar 가능
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE' // sprint-boot 의 의존성 관리
+    id 'war' // generate war file
+    id 'org.asciidoctor.convert' version "1.5.3" //
+    id 'com.ewerk.gradle.plugins.querydsl' version "1.0.10" /// querydsl 플러그인
+}
+
+
+/*
+ 인코딩 지정
+ Unmappable character for encoding MS949
+ Unmappable character for encoding UTF-8
+ 에러를 방지한다.
+*/
+compileJava.options.encoding = 'UTF-8'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+
+configurations {
+    all{
+        exclude module: 'spring-boot-starter-logging'
+    } // compile configuration에서 특정 모듈 제외
+
+    //  compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging' // compile configuration에서 특정 그룹의 특정 모듈 제외
+    // all*.exclude group: 'org.gradle.test.excludes', module: 'reports' // 모든 configuration에서 특정 모듈 제외
+}
+
+
+
+dependencies {
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    // Use JUnit test framework.
+    testImplementation 'junit:junit:4.13.1'
+
+    // This dependency is exported to consumers, that is to say found on their compile classpath.
+    implementation  'org.apache.commons:commons-math3:3.6.1'
+
+    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
+    implementation 'com.google.guava:guava:30.0-jre'
+
+
+    /* ======== Spring ========*/
+    implementation("org.springframework.boot:spring-boot-starter-parent:${springBootStarterVersion}")
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: "${springBootStarterVersion}"
+    implementation("org.springframework.boot:spring-boot-starter-web:${springBootStarterVersion}")
+    implementation("org.springframework.boot:spring-boot-starter:${springBootStarterVersion}")
+    implementation("org.springframework.boot:spring-boot-starter-tomcat:${springBootStarterVersion}") // war 생성시 주석처리, jar 생성시 필요
+    /* implementation("org.springframework.boot:spring-boot-starter-web:${springBootStarterVersion}")
+             {
+                 // log4j2 사용을 위해 logback 은 제외시킴
+                 //   exclude group:'ch.qos.logback'
+                 // exclude group:'org.slf4j', module: 'slf4j-log4j12'
+                 exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+                 //  exclude group:'org.springframework.boot:spring-boot-starter-logging'
+             }*/
+    implementation("org.springframework.boot:spring-boot-starter-log4j2:${springBootStarterVersion}")
+
+
+
+    implementation group: 'org.springframework', name: 'spring-core', version: "${springVersion}"
+    implementation group: 'org.springframework', name: 'spring-context', version: "${springVersion}"
+    implementation group: 'org.springframework', name: 'spring-orm', version: "${springVersion}"
+    implementation group: 'org.springframework', name: 'spring-tx', version: "${springVersion}"
+    implementation group: 'org.springframework', name: 'spring-beans', version: "${springVersion}"
+
+    // multipart
+    implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
+
+
+    // Rest Doc
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:1.2.6.RELEASE'
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootStarterVersion}")
+    testImplementation("org.springframework.boot:spring-boot-starter-web:${springBootStarterVersion}")
+
+
+
+
+    /* ======== ETC  ======== */
+    /// lombok
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    ///
+    // validator
+    // https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator
+    implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.2.0.Final'
+    // https://mvnrepository.com/artifact/javax.validation/validation-api
+    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+// https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
+    implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.0.0'
+
+
+
+    /* ======== DB ========*/
+    /// PostgreSQL JDBC
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.20'
+    /// Apache Commons DBCP
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2
+    implementation group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.8.0'
+    /// hibernate
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.5.0.Final'
+    implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '5.5.0.Final'
+
+    /// QueryDSL
+    implementation group: 'com.querydsl', name: 'querydsl-jpa', version: "${queryDSLVersion}"
+    implementation group: 'com.querydsl', name: 'querydsl-jdo', version: "${queryDSLVersion}"
+    implementation group: 'com.querydsl', name: 'querydsl-apt', version: "${queryDSLVersion}"
+    implementation group: 'com.querydsl', name: 'querydsl-core', version: "${queryDSLVersion}"
+    implementation group: 'com.querydsl', name: 'querydsl-sql', version: "${queryDSLVersion}"
+    implementation group: 'com.querydsl', name: 'querydsl-sql-spatial', version: "${queryDSLVersion}"
+    implementation group: 'com.querydsl', name: 'querydsl-sql-spring', version: "${queryDSLVersion}"
+
+
+    /// Spring Data JPA
+    implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: "${springBootStarterVersion}"
+
+
+
+
+    /* ======== Log ======== */
+    /// SLF4J
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
+    implementation group: 'org.slf4j', name: 'slf4j-ext', version: "${slf4jVersion}"
+
+    /// LOG4J2
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: "${log4jVersion}"
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: "${log4jVersion}"
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: "${log4jVersion}"
+
+
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+
+/* 라이브러리는 bootJar 는 하면 안되고 jar 는 생성가능해야 한다..*/
+bootJar{
+    enabled = true;
+}
+jar {
+    enabled = false;
+
+}
+
+
+
+
+
+def queryDslOutput = file("src-gen/main/java")
+
+querydsl {
+    library = "com.querydsl:querydsl-apt"
+    jpa=true
+    // jdo=true
+    querydslSourcesDir = queryDslOutput
+
+}
+
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
+configurations{
+    querydsl.extendsFrom compileClasspath
+    queryDslNativeSql
+
+}
+dependencies {
+    queryDslNativeSql "com.querydsl:querydsl-sql-codegen:4.1.4"
+    queryDslNativeSql  files('libs/ojdbc8-12c.jar')
+}
+
+
+def queryDslNativeOutput = file("src-gen/main/generated-querydslnative")
+
+
+
+task generateQueryDslNative()  {
+
+    /*
+    queryDslNativeOutput.deleteDir()
+    queryDslNativeOutput.mkdirs()
+
+    ant.taskdef(name: 'generateQueryDslNative', classname: 'com.querydsl.sql.codegen.ant.AntMetaDataExporter', classpath: configurations.queryDslNativeSql.asPath)
+    ant.generateQueryDslNative(
+            jdbcDriver: 'oracle.jdbc.driver.OracleDriver',
+            jdbcUrl: 'jdbc:oracle:thin:@192.168.1.19:1521:orcl',
+            jdbcUser: 'c##shh',
+            jdbcPassword: "c##shh",
+            namePrefix: 'QS',
+            packageName: 'test',
+            schemaPattern: 'C##SHH', // SQLServer 등에서 필요
+            // tableNamePattern: 'WTWS_%', // 특정 테이블만 생성
+            targetFolder: queryDslNativeOutput.getAbsolutePath()
+    )
+    */
+}
+
+
+sourceSets {
+    main {
+        java {
+            srcDir "src-gen/main/java"
+            srcDir queryDslNativeOutput
+        }
+    }
+
+}
