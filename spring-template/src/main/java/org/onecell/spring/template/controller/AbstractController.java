@@ -87,6 +87,7 @@ public class AbstractController {
 
     /**
      * Binding 시 BindingResult가 없다면 이곳으로 반환된다.
+     * 객체에 대한 Binding 시  @Validation 에 대한 제약조건 오류시 발생한다.
      * @param e
      * @param request
      * @return
