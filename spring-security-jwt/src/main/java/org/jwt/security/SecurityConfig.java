@@ -45,9 +45,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
 
-        http = http.cors().and().csrf().disable();
+        http = http.cors().and().csrf().disable(); // cors() 는 preflight 요청은 인증처리 하지 않겠다는 의미이다.
 
         http =  http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and(); //JWT를 사용할 것이므로 session 으로 상태를 저장할 필요없음
+
+        /*http.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest) /// CORS preflight 요청은 인증처리 하지 않겠다는 의미이다. cors()와 같은 의미라 주석처리.
+                .permitAll()*/
 
         /// 접근제어할 부분
         http.authorizeRequests().antMatchers("/**/login").permitAll()
@@ -97,7 +100,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
+        //config.addAllowedOrigin("*"); // allowCredentials 가 true 이면 allowedOrigin 은 "*" 를 허용하지 않아 주석처리
+        config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
