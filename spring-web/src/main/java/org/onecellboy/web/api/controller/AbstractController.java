@@ -224,8 +224,24 @@ return null;
 
 
 
-     // AuthenticationException.class 해당 에러는 인증자체가 안되어 있을 때
+    /**
+     *
+     * 인증 실패시 에러
+     * authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+     * 코드로 직접 인증시 해당 인증 메소드에서 인증실패(AuthenticationException)을 발생시킨다.
+     *
+     * @param e
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @ResponseStatus(code = HttpStatus.FORBIDDEN) //403 에러
+    @ExceptionHandler({ AuthenticationException.class})
+    public Object AuthenticationExceptionHandling(RuntimeException e, WebRequest request)
+    {
 
+        return null;
+    }
 
 
 
