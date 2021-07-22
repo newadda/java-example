@@ -59,10 +59,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // login url은 권한이 필요없다.
                 .anyRequest().authenticated();
 
+        //// UsernamePasswordAuthenticationFilter 자기전에 할 filter를 지정한다.
         /// jwt 처리
         http.addFilterBefore(
-                //jwtTokenFilterBean(),
-                jwtAuthenticationFilterBean(),
+                jwtTokenFilterBean(),
+                //jwtAuthenticationFilterBean(),
                 UsernamePasswordAuthenticationFilter.class
         );
     }
@@ -76,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilterBean() throws Exception {
 
-        AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/**");
+        AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/jwt_login");
 
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(DEFAULT_ANT_PATH_REQUEST_MATCHER, jwtTokenUtilBean(), inMemoryUserDetailsManager());
         jwtAuthenticationFilter.setAuthenticationManager(authenticationManagerBean());
