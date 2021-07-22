@@ -16,7 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
-import java.nio.file.AccessDeniedException;
+//import org.springframework.security.access.AccessDeniedException;
 import java.util.Locale;
 
 /**
@@ -124,15 +124,35 @@ public class AbstractController {
      * @param request
      * @return
      */
-    @ResponseBody
+   /* @ResponseBody
     @ResponseStatus(code = HttpStatus.FORBIDDEN) //403 에러
     @ExceptionHandler({ AccessDeniedException.class})
     public Object RuntimeExceptionHandling(RuntimeException e, WebRequest request)
     {
 
         return null;
-    }
+    }*/
 
+    /**
+     *
+     * 인증 실패시 에러
+     * authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+     * 코드로 직접 인증시 해당 인증 메소드에서 인증실패(AuthenticationException)을 발생시킨다.
+     *
+     * @param e
+     * @param request
+     * @return
+     */
+  /*  @ResponseBody
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED) //403 에러
+    @ExceptionHandler({ AuthenticationException.class})
+    public Object AuthenticationExceptionHandling(AuthenticationException e, WebRequest request)
+    {
+        ErrorRootDto dto = new ErrorRootDto();
+        dto.getError().setCode(e.getClass().getSimpleName());
+        dto.getError().setUser_message(e.getLocalizedMessage());
+        return null;
+    }*/
 
 
 
