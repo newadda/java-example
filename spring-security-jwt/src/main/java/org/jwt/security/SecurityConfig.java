@@ -74,7 +74,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtTokenUtil();
     }
 
-    @Bean
+    /// 주석 처리 안하면 자동으로 injection 된다.
+    //@Bean
     public JwtAuthenticationFilter jwtAuthenticationFilterBean() throws Exception {
 
         AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/jwt_login");
