@@ -77,7 +77,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
 
-
+        /// 인증이 되었든 안되었든 다음 필터로 넘어가면 된다. 보통 인증 필터들은 앞부분에서
+        //// SecurityContextHolder.getContext().getAuthentication().isAuthenticated() 를 확인하여 인증이 되었으면 바로 다음으로 필터를 넘긴다.
         chain.doFilter(req, res);
     }
 
