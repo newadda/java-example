@@ -1,0 +1,459 @@
+ifndef::snippets[]
+:snippets: build/generated-snippets
+endif::[]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 1
+:sectlinks:
+:hardbreaks-option:
+
+= Api
+
+
+== 데이터 타입
+|===
+|타입 |Json 타입 |형식
+
+|Integer
+|Number
+|
+
+|Long
+|Number
+|
+
+|Double
+|Number
+|
+
+|String
+|String
+|
+
+|Object or {}
+|Object
+|
+
+|Array or []
+|Array
+|
+
+|Boolean
+|Boolean
+|
+
+|DateTime
+|String
+|YYYY-MM-DDTHH24:MI:SS 예) 2020-01-01T00:00:00
+
+|===
+
+[[날짜형식]]
+== 날짜 형식
+
+=== ISO 형식을 따름
+|===
+|구분 |형식 |예
+
+|년
+|YYYY
+|2020
+
+|년월
+|YYYY-MM
+|2020-01
+
+|년월일
+|YYYY-MM-DD
+|2020-01-01
+
+|년월일시
+|YYYY-MM-DDTHH24
+|2020-01-01T01
+
+|년월일시분
+|YYYY-MM-DDTHH24:MI
+|2020-01-01T01:23
+
+|년월일시분초
+|YYYY-MM-DD-HH24:MI:SS
+|2020-01-01T01:23:30 +
+or 2020-01-01T01:23:30.003
+|===
+
+
+=== 일반
+[cols="1,1"]
+|===
+|구분 |형식 |예
+
+|년
+|YYYY
+|2020
+
+|년월
+|YYYYMM
+|202001
+
+|년월일
+|YYYYMMDD
+|20200101
+
+|년월일시
+|YYYYMMDDHH24
+|2020010102
+
+|년월일시분
+|YYYYMMDDHH24MI
+|202001030232
+
+|년월일시분초
+|YYYYMMDDHH24MISS
+|20200103023206
+|===
+
+
+== 코드
+=== 공통
+[cols="1,1"]
+|===
+|구분 |형식
+
+|사용여부
+|Y: 사용, N: 사용안함
+
+|===
+
+
+=== 기상청 지점코드
+[cols="1,1,1"]
+|===
+|stnId|지점명|특보해당구역
+
+|108
+|서울
+|전국
+
+|109
+|서울
+|서울,인천,경기도
+
+|159
+|부산
+|부산. 울산. 경상남도
+
+|143
+|대구
+|대구. 경상북도
+
+|156
+|광주
+|광주. 전라남도
+
+|146
+|전주
+|전라북도
+
+|133
+|대전
+|대전. 세종. 충청남도
+
+|131
+|청주
+|충청북도
+
+|105
+|강릉
+|강원도
+
+|184
+|제주
+|제주도
+|===
+
+
+= 응답
+|===
+|응답코드|설명
+|200
+|성공
+
+|400
+|요청 실패
+
+|401
+|인증 실패
+
+|403
+|권한 없음
+|===
+
+400 에러시 응답 결과
+....
+{
+    "code":"TestException"
+    "user_message":"에러입니다."
+}
+....
+
+
+
+
+= 인증
+== 로그인
+결과로 나온 jwt_token 값을 요청의 헤더에 넣으면 된다. +
+
+|===
+|헤더|값
+|Authorization
+|Bearer {jwt_token}
+|===
+
+
+
+:folder: auth
+:api_name: 로그인
+JWT Token 을 사용한다.
+
+* 토큰 내용
+```
+{
+  "sub": "test", // 유저명
+  "roles": [     // 권한
+    "ROLE_ADMIN",
+    "ROLE_VISITOR"
+  ],
+  "iss": "http://devglan.com",
+  "iat": 1625023072,
+  "exp": 1625041072
+}
+```
+* ROLES
+|===
+|명칭 |권한
+
+|ROLE_ADMIN
+|모든 권한
+
+|ROLE_VISITOR
+|조회 권한
+
+|===
+
+
+=== Http Request
+include::{snippets}/{folder}/{api_name}/http-request.adoc[opts=optional]
+==== Path Parameters
+include::{snippets}/{folder}/{api_name}/path-parameters.adoc[opts=optional]
+
+==== Query Parameter
+include::{snippets}/{folder}/{api_name}/request-parameters.adoc[opts=optional]
+
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/request-fields.adoc[opts=optional]
+
+==== Body Example
+include::{snippets}/{folder}/{api_name}/request-body.adoc[opts=optional]
+
+=== Response
+include::{snippets}/{folder}/{api_name}/http-response.adoc[opts=optional]
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/response-fields.adoc[opts=optional]
+==== Body Example
+include::{snippets}/{folder}/{api_name}/response-body.adoc[opts=optional]
+
+
+
+= test01
+== 테스트01
+:folder: test01
+:api_name: 테스트01
+=== Http Request
+include::{snippets}/{folder}/{api_name}/http-request.adoc[opts=optional]
+==== Path Parameters
+include::{snippets}/{folder}/{api_name}/path-parameters.adoc[opts=optional]
+
+==== Query Parameter
+include::{snippets}/{folder}/{api_name}/request-parameters.adoc[opts=optional]
+
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/request-fields.adoc[opts=optional]
+
+==== Body Example
+include::{snippets}/{folder}/{api_name}/request-body.adoc[opts=optional]
+
+=== Response
+include::{snippets}/{folder}/{api_name}/http-response.adoc[opts=optional]
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/response-fields.adoc[opts=optional]
+==== Body Example
+include::{snippets}/{folder}/{api_name}/response-body.adoc[opts=optional]
+
+
+
+== 테스트02
+:folder: test02
+:api_name: 테스트01
+=== Http Request
+include::{snippets}/{folder}/{api_name}/http-request.adoc[opts=optional]
+==== Path Parameters
+include::{snippets}/{folder}/{api_name}/path-parameters.adoc[opts=optional]
+
+==== Query Parameter
+include::{snippets}/{folder}/{api_name}/request-parameters.adoc[opts=optional]
+
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/request-fields.adoc[opts=optional]
+
+==== Body Example
+include::{snippets}/{folder}/{api_name}/request-body.adoc[opts=optional]
+
+=== Response
+include::{snippets}/{folder}/{api_name}/http-response.adoc[opts=optional]
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/response-fields.adoc[opts=optional]
+==== Body Example
+include::{snippets}/{folder}/{api_name}/response-body.adoc[opts=optional]
+
+
+
+== 테스트03
+:folder: test01
+:api_name: 테스트03
+=== Http Request
+include::{snippets}/{folder}/{api_name}/http-request.adoc[opts=optional]
+==== Path Parameters
+include::{snippets}/{folder}/{api_name}/path-parameters.adoc[opts=optional]
+
+==== Query Parameter
+include::{snippets}/{folder}/{api_name}/request-parameters.adoc[opts=optional]
+
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/request-fields.adoc[opts=optional]
+
+==== Body Example
+include::{snippets}/{folder}/{api_name}/request-body.adoc[opts=optional]
+
+=== Response
+include::{snippets}/{folder}/{api_name}/http-response.adoc[opts=optional]
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/response-fields.adoc[opts=optional]
+==== Body Example
+include::{snippets}/{folder}/{api_name}/response-body.adoc[opts=optional]
+
+
+
+
+
+== 테스트04
+:folder: test01
+:api_name: 테스트04
+=== Http Request
+include::{snippets}/{folder}/{api_name}/http-request.adoc[opts=optional]
+==== Path Parameters
+include::{snippets}/{folder}/{api_name}/path-parameters.adoc[opts=optional]
+
+==== Query Parameter
+include::{snippets}/{folder}/{api_name}/request-parameters.adoc[opts=optional]
+
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/request-fields.adoc[opts=optional]
+
+==== Body Example
+include::{snippets}/{folder}/{api_name}/request-body.adoc[opts=optional]
+
+=== Response
+include::{snippets}/{folder}/{api_name}/http-response.adoc[opts=optional]
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/response-fields.adoc[opts=optional]
+==== Body Example
+include::{snippets}/{folder}/{api_name}/response-body.adoc[opts=optional]
+
+
+
+
+
+== 테스트05
+:folder: test01
+:api_name: 테스트05
+=== Http Request
+include::{snippets}/{folder}/{api_name}/http-request.adoc[opts=optional]
+==== Path Parameters
+include::{snippets}/{folder}/{api_name}/path-parameters.adoc[opts=optional]
+
+==== Query Parameter
+include::{snippets}/{folder}/{api_name}/request-parameters.adoc[opts=optional]
+
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/request-fields.adoc[opts=optional]
+
+==== Body Example
+include::{snippets}/{folder}/{api_name}/request-body.adoc[opts=optional]
+
+=== Response
+include::{snippets}/{folder}/{api_name}/http-response.adoc[opts=optional]
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/response-fields.adoc[opts=optional]
+==== Body Example
+include::{snippets}/{folder}/{api_name}/response-body.adoc[opts=optional]
+
+
+
+
+
+
+
+= test02
+== 테스트01
+:folder: test02
+:api_name: 테스트01
+=== Http Request
+include::{snippets}/{folder}/{api_name}/http-request.adoc[opts=optional]
+==== Path Parameters
+include::{snippets}/{folder}/{api_name}/path-parameters.adoc[opts=optional]
+
+==== Query Parameter
+include::{snippets}/{folder}/{api_name}/request-parameters.adoc[opts=optional]
+
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/request-fields.adoc[opts=optional]
+
+==== Body Example
+include::{snippets}/{folder}/{api_name}/request-body.adoc[opts=optional]
+
+=== Response
+include::{snippets}/{folder}/{api_name}/http-response.adoc[opts=optional]
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/response-fields.adoc[opts=optional]
+==== Body Example
+include::{snippets}/{folder}/{api_name}/response-body.adoc[opts=optional]
+
+
+
+
+
+== 테스트02
+:folder: test02
+:api_name: 테스트02
+=== Http Request
+include::{snippets}/{folder}/{api_name}/http-request.adoc[opts=optional]
+==== Path Parameters
+include::{snippets}/{folder}/{api_name}/path-parameters.adoc[opts=optional]
+
+==== Query Parameter
+include::{snippets}/{folder}/{api_name}/request-parameters.adoc[opts=optional]
+
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/request-fields.adoc[opts=optional]
+
+==== Body Example
+include::{snippets}/{folder}/{api_name}/request-body.adoc[opts=optional]
+
+=== Response
+include::{snippets}/{folder}/{api_name}/http-response.adoc[opts=optional]
+==== Body Fields
+include::{snippets}/{folder}/{api_name}/response-fields.adoc[opts=optional]
+==== Body Example
+include::{snippets}/{folder}/{api_name}/response-body.adoc[opts=optional]

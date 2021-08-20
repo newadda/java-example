@@ -1,0 +1,65 @@
+buildscript {
+    /// 변수 정의
+    ext {
+        springBootStarterVersion = '2.5.0'
+        springVersion = '5.5.2'
+        lombokVersion = '1.18.20'
+        queryDSLVersion = '4.4.0'
+        slf4jVersion = '1.7.25'
+        log4jVersion = '2.14.1'
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.5.0")
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE"
+
+    }
+
+}
+
+
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.5.0' // bootjar 가능
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE' // sprint-boot 의 의존성 관리
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+
+compileJava.options.encoding = 'UTF-8'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+
+    /// Spring
+    implementation("org.springframework.boot:spring-boot-starter-parent:${springBootStarterVersion}")
+    implementation  group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: "${springBootStarterVersion}"
+    implementation("org.springframework.boot:spring-boot-starter-web:${springBootStarterVersion}")
+    implementation("org.springframework.boot:spring-boot-starter:${springBootStarterVersion}")
+    implementation ("org.springframework.boot:spring-boot-starter-tomcat:${springBootStarterVersion}") // war 생성시 주석처리, jar 생성시 필요
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: "${springBootStarterVersion}"
+
+
+    /// Test And Restdoc
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: "${springVersion}" // 인증 테스트를 위해서 사용한다.(@WithMockUser 사용위해)
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootStarterVersion}")
+    testImplementation("org.springframework.boot:spring-boot-starter-web:${springBootStarterVersion}")
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+
+}
+
+test {
+    useJUnitPlatform()
+}
