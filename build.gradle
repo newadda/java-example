@@ -54,11 +54,11 @@ subprojects {
 
 project(':spring-web') {
     dependencies {
-        compile project(':spring-lib')
+       // compile project(':spring-lib')
     }
 }
 
-
+/*
 task wrapper(type: Wrapper) {
     gradleVersion = '6.3'
-}
+}*/

@@ -6,15 +6,38 @@
  * user guide available at https://docs.gradle.org/4.9/userguide/java_library_plugin.html
  */
 
+
+
+buildscript {
+    /// 변수 정의
+    ext {
+        springBootStarterVersion = '2.5.0'
+        springVersion = '5.5.2'
+        lombokVersion = '1.18.20'
+        queryDSLVersion = '4.4.0'
+        slf4jVersion = '1.7.25'
+        log4jVersion = '2.14.1'
+    }
+    dependencies {
+      //  classpath("org.springframework.boot:spring-boot-gradle-plugin:2.5.0")
+     //   classpath "io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE"
+
+    }
+
+}
+
+
+
 plugins {
     // Apply the java-library plugin to add support for Java Library
+    id 'java'
     id 'java-library'
 }
 // In this section you declare where to find the dependencies of your project
 repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+  //  jcenter()
     mavenCentral()
 }
 
@@ -27,28 +50,28 @@ dependencies {
 
     ///// spring batch 에 필요한 라이브러리
     // spring batch core
-    compile group: 'org.springframework.batch', name: 'spring-batch-core', version: '4.0.1.RELEASE'
+    implementation  group: 'org.springframework.batch', name: 'spring-batch-core', version: '4.0.1.RELEASE'
     // spring-jdbc, db 연동에 필요
-    compile group: 'org.springframework', name: 'spring-jdbc', version: '5.0.8.RELEASE'
+    implementation  group: 'org.springframework', name: 'spring-jdbc', version: '5.0.8.RELEASE'
     // PlatformTransactionManager 에 필요
-    compile group: 'org.springframework', name: 'spring-tx', version: '5.0.8.RELEASE'
+    implementation  group: 'org.springframework', name: 'spring-tx', version: '5.0.8.RELEASE'
     // Transaction Manager 에 필요
-    compile group: 'org.eclipse.persistence', name: 'javax.persistence', version: '2.2.0'
+    implementation  group: 'org.eclipse.persistence', name: 'javax.persistence', version: '2.2.0'
 
     // Vibur 란 DBCP
-    compile group: 'com.googlecode.concurrentlinkedhashmap', name: 'concurrentlinkedhashmap-lru', version: '1.4.2'
-    compile group: 'org.vibur', name: 'vibur-dbcp', version: '19.1'
+    implementation  group: 'com.googlecode.concurrentlinkedhashmap', name: 'concurrentlinkedhashmap-lru', version: '1.4.2'
+    implementation  group: 'org.vibur', name: 'vibur-dbcp', version: '19.1'
 
     // mysql - jdbc
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
+    implementation  group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
 
 
 
     // json job parameter 직렬화, 역직렬화를 위해서.
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.8'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.8'
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.9.8'
+    implementation  group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
+    implementation  group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.8'
+    implementation  group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.8'
+    implementation  group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.9.8'
 
 
 
