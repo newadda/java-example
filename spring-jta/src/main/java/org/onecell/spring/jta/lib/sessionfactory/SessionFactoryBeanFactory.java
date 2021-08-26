@@ -1,10 +1,8 @@
-package org.onecell.spring.template.db;
+package org.onecell.spring.jta.lib.sessionfactory;
 
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.Database;
-import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import javax.sql.DataSource;
@@ -13,10 +11,7 @@ import java.util.Properties;
 
 public class SessionFactoryBeanFactory {
 
-    public LocalSessionFactoryBean createHibernateXaLocalSessionFactoryBean(DataSource dataSource, String[] packagesScanPath, Properties properties) throws IOException {
-        properties.put("hibernate.connection.handling_mode","DELAYED_ACQUISITION_AND_RELEASE_AFTER_STATEMENT");
-        return createHibernateLocalSessionFactoryBean(dataSource,packagesScanPath,properties);
-    }
+
 
 
    public LocalSessionFactoryBean createHibernateLocalSessionFactoryBean(DataSource dataSource, String[] packagesScanPath, Properties properties)

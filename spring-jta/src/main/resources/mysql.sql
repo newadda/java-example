@@ -1,0 +1,11 @@
+CREATE DATABASE shhdb;
+
+
+CREATE TABLE shhdb.TEST01 (
+	id BIGINT auto_increment NULL,
+	username varchar2(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
+	CONSTRAINT TEST01_PK PRIMARY KEY (id)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;

@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.AbstractResourceBasedMessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.validation.Validator;
@@ -143,7 +144,9 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-
+        // Paging 처리
+        //registry.addConverter(new StringToSortConverter());
+        //registry.addConverter(new YearMonthConverter());
 
     }
 
@@ -219,6 +222,16 @@ public class MvcConfig implements WebMvcConfigurer {
     }
 
 
+    /* CORS 허용 */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowedMethods(HttpMethod.GET.name(),HttpMethod.POST.name(),HttpMethod.PUT.name(),
+                        HttpMethod.DELETE.name(),HttpMethod.OPTIONS.name(),HttpMethod.HEAD.name())
+                //.allowedHeaders("Origin", "X-Requested-With", "Content-Type", "Accept")
+                .allowCredentials(true).maxAge(3600);
+    }
 
 
 }

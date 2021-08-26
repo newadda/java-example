@@ -7,18 +7,5 @@
  * in the user guide at https://docs.gradle.org/4.8.1/userguide/multi_project_builds.html
  */
 
-rootProject.name = 'ONE_Server'
 
-include 'spring-lib'
-include 'spring-web'
-include 'hibernate-example'
-include 'akka-example'
-include 'spring-di'
-// "services:webservice"
-include 'spring-security'
-include 'quartz'
-include 'querydsl'
-include 'gis'
-include 'python_script'
-include 'spring-jta'
-
+rootProject.name = 'spring-jta'

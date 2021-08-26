@@ -34,8 +34,8 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @SpringBootTest(classes = TestServer.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = "classpath:test.properties")
-@WithMockUser( roles = { "ADMIN","VISITOR"}) // 테스트 권한 설정
+@TestPropertySource(locations = "classpath:test.properties") // 테스트를 위한 properties 파일 위치를 지정한다.
+@WithMockUser( roles = { "ADMIN","VISITOR"}) // Security 프로젝트의 테스트 권한 설정
 public  class Init {
     @Autowired
     protected WebApplicationContext context;

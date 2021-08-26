@@ -1,4 +1,4 @@
-package org.onecell.spring.template.db;
+package org.onecell.spring.jta.lib.transaction;
 
 import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;

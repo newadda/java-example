@@ -1,0 +1,97 @@
+buildscript {
+    /// 변수 정의
+    ext {
+        springBootStarterVersion = '2.5.0'
+        springVersion = '5.3.7'
+        lombokVersion = '1.18.20'
+        queryDSLVersion = '4.4.0'
+        slf4jVersion = '1.7.25'
+        log4jVersion = '2.14.1'
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootStarterVersion}")
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.8.RELEASE"
+
+    }
+}
+
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.5.0' // bootjar 가능
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE' // sprint-boot 의 의존성 관리
+    id 'war' // generate war file
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
+    id 'com.ewerk.gradle.plugins.querydsl' version "1.0.10" /// querydsl 플러그인
+}
+
+
+compileJava.options.encoding = 'UTF-8'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+
+    /* ======== Spring ========*/
+    implementation("org.springframework.boot:spring-boot-starter-parent:${springBootStarterVersion}")
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: "${springBootStarterVersion}"
+    implementation("org.springframework.boot:spring-boot-starter-web:${springBootStarterVersion}")
+    implementation("org.springframework.boot:spring-boot-starter:${springBootStarterVersion}")
+    implementation("org.springframework.boot:spring-boot-starter-tomcat:${springBootStarterVersion}") // war 생성시 주석처리, jar 생성시 필요
+
+
+    /* ======= Spring DB  ========= */
+    implementation group: 'org.springframework', name: 'spring-core', version: "${springVersion}"
+    implementation group: 'org.springframework', name: 'spring-context', version: "${springVersion}"
+    implementation group: 'org.springframework', name: 'spring-orm', version: "${springVersion}"
+    implementation group: 'org.springframework', name: 'spring-tx', version: "${springVersion}"
+    implementation group: 'org.springframework', name: 'spring-beans', version: "${springVersion}"
+    implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: "${springBootStarterVersion}"
+    implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.1.0.RELEASE'
+
+
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-jta-atomikos
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jta-atomikos', version: "${springBootStarterVersion}"
+
+
+
+
+    /* ======== DB =========*/
+
+    // hibernate core
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.5.7.Final'
+
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.12'
+
+    // Apache DBCP
+    implementation group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.7.0'
+
+    // QueryDSL
+    implementation group: 'com.querydsl', name: 'querydsl-jpa', version: '4.3.1'
+    implementation group: 'com.querydsl', name: 'querydsl-jdo', version: '4.3.1'
+    implementation group: 'com.querydsl', name: 'querydsl-apt', version: '4.3.1'
+    implementation group: 'com.querydsl', name: 'querydsl-core', version: '4.3.1'
+    implementation group: 'com.querydsl', name: 'querydsl-sql', version: '4.3.1'
+    implementation group: 'com.querydsl', name: 'querydsl-sql-spatial', version: '4.3.1'
+    implementation group: 'com.querydsl', name: 'querydsl-sql-spring', version: '4.3.1'
+
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+wrapper() {
+    gradleVersion = '7.2'
+}
