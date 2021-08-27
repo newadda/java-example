@@ -7,15 +7,37 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Properties;
+import java.util.Set;
 
 public class SessionFactoryBeanFactory {
 
 
+    public LocalSessionFactoryBean createXaLocalSessionFactoryBean(DataSource dataSource, String[] packagesScanPath, Properties properties) throws IOException {
+        properties.put("hibernate.connection.handling_mode","DELAYED_ACQUISITION_AND_RELEASE_AFTER_STATEMENT");
+        properties.put("hibernate.transaction.coordinator_class","jta");  //
+        properties.put("hibernate.transaction.jta.platform","Atomikos");  // jta 를 구현하는 구현체이다.
+
+        return createHibernateLocalSessionFactoryBean(dataSource,packagesScanPath,properties);
+    }
 
 
    public LocalSessionFactoryBean createHibernateLocalSessionFactoryBean(DataSource dataSource, String[] packagesScanPath, Properties properties)
    {
+       Properties defaultProperties = hibernateDefaultProperties();
+       Set<Object> keys = defaultProperties.keySet();
+
+       for( Object key :keys)
+       {
+           boolean b = properties.containsKey(key);
+           if(b==false)
+           {
+               properties.put(key,defaultProperties.get(key));
+           }
+       }
+
+
        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
        sessionFactory.setDataSource(dataSource);
        sessionFactory.setPackagesToScan(
@@ -94,6 +116,7 @@ public class SessionFactoryBeanFactory {
         entityManagerFactoryBean.setPackagesToScan(packagesScanPath);
         entityManagerFactoryBean.setPersistenceUnitName(persistenceUnitName);
         entityManagerFactoryBean.setJpaProperties(properties);
+
         return entityManagerFactoryBean;
     }
 

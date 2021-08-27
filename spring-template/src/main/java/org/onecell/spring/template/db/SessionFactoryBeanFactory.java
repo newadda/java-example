@@ -15,6 +15,8 @@ public class SessionFactoryBeanFactory {
 
     public LocalSessionFactoryBean createHibernateXaLocalSessionFactoryBean(DataSource dataSource, String[] packagesScanPath, Properties properties) throws IOException {
         properties.put("hibernate.connection.handling_mode","DELAYED_ACQUISITION_AND_RELEASE_AFTER_STATEMENT");
+        properties.put("hibernate.transaction.coordinator_class","jta");  //
+        properties.put("hibernate.transaction.jta.platform","Atomikos");  // jta 를 구현하는 구현체이다.
         return createHibernateLocalSessionFactoryBean(dataSource,packagesScanPath,properties);
     }
 

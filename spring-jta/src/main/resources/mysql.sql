@@ -1,11 +1,38 @@
-CREATE DATABASE shhdb;
+/* 1번째 db */
 
+CREATE DATABASE shhdb1;
 
-CREATE TABLE shhdb.TEST01 (
-	id BIGINT auto_increment NULL,
-	username varchar2(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
+CREATE TABLE shhdb1.TEST01 (
+	id BIGINT auto_increment NOT NULL,
+	username VARCHAR(100) NULL,
 	CONSTRAINT TEST01_PK PRIMARY KEY (id)
 )
 ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4
 COLLATE=utf8mb4_0900_ai_ci;
+
+
+INSERT INTO shhdb1.TEST01 (username)
+	VALUES ('홍길동');
+
+
+
+/* 2번째 db */
+
+CREATE DATABASE shhdb2;
+
+
+CREATE TABLE shhdb2.TEST01 (
+	id BIGINT auto_increment NOT NULL,
+	username VARCHAR(100) NULL,
+	CONSTRAINT TEST01_PK PRIMARY KEY (id)
+)
+ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_0900_ai_ci;
+
+
+INSERT INTO shhdb1.TEST01 (username)
+	VALUES ('이순신');
+
+

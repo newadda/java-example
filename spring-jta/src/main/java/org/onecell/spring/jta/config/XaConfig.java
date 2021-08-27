@@ -6,6 +6,7 @@ import org.hibernate.engine.transaction.jta.platform.internal.AtomikosJtaPlatfor
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Primary;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
@@ -18,7 +19,7 @@ public class XaConfig {
     @Bean(name = "userTransaction")
     public UserTransaction userTransaction() throws Throwable {
         UserTransactionImp userTransactionImp = new UserTransactionImp();
-        userTransactionImp.setTransactionTimeout(10000);
+        userTransactionImp.setTransactionTimeout(60*6);
         return userTransactionImp;
     }
 
@@ -29,6 +30,7 @@ public class XaConfig {
         return userTransactionManager;
     }
 
+    @Primary
     @Bean(name = "xaTxManager")
     @DependsOn({ "userTransaction", "atomikosTransactionManager" })
     public PlatformTransactionManager transactionManager() throws Throwable {

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<Configuration monitorInterval="5">
+    <properties>
+        <property name="name">fep_server</property>
+        <property name="pattern">%marker %d{yyyy-MM-dd HH:mm:ss.SSS} | %-5.5p | [%10.10t] | %-20.20C:%-5.5L | %msg%n</property>
+    </properties>
+
+
+    <!-- Appender, Layout 설정 -->
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern}"/>
+        </Console>
+
+        <RollingFile name="RollingFile" bufferedIO="true" bufferSize="800" immediateFlush="true" fileName="logs/server.log"
+                     filePattern="logs/archive/$${date:yyyy-MM}/signal-%d{yyyy-MM-dd}-%i.log.gz">
+            <!--   <JSONLayout complete="false" compact="true" eventEol="true" locationInfo="true" properties="true"></JSONLayout> -->
+            <PatternLayout pattern="${pattern}"/>
+              <Policies>
+                  <TimeBasedTriggeringPolicy />
+                  <SizeBasedTriggeringPolicy size="50 MB"/>
+              </Policies>
+          </RollingFile>
+      </Appenders>
+
+
+      <Loggers>
+
+          <!-- hibernate SQL DML 문장보기 DEBUG 되어야 한다.-->
+          <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+              <appender-ref ref="RollingFile"/>
+              <AppenderRef ref="console"/>
+          </logger>
+          <!-- hibernate JDBC 파라미터보기 trace 는 되어야 보인다. -->
+          <logger name="org.hibernate.type" level="WARN" additivity="false">
+              <appender-ref ref="RollingFile"/>
+              <AppenderRef ref="console"/>
+          </logger>
+
+
+
+          <!-- Spring Builtin Logger -->
+          <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter"
+                  level="INFO"  additivity="true">
+              <AppenderRef ref="console"/>
+          </logger>
+
+
+                 <Root level="DEBUG">
+                     <!-- Logger 설정          -->
+              <AppenderRef ref="console"/>
+             <AppenderRef ref="RollingFile"/>
+           </Root>
+       </Loggers>
+
+   </Configuration>

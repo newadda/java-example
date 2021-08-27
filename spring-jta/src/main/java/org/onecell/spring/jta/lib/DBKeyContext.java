@@ -1,14 +1,14 @@
 package org.onecell.spring.jta.lib;
 
-public class DBKeyContext {
-    private final ThreadLocal<String> CONTEXT = new ThreadLocal<>();
+public class DBKeyContext<T> {
+    private final ThreadLocal<T> CONTEXT = new ThreadLocal<>();
 
 
-    public void setDbKey(String  dbKey) {
+    public void setDbKey(T  dbKey) {
         CONTEXT.set(dbKey);
     }
 
-    public  String get() {
+    public  T get() {
         return CONTEXT.get();
     }
 

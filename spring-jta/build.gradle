@@ -22,7 +22,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE' // sprint-boot 의 의존성 관리
     id 'war' // generate war file
     id "org.asciidoctor.jvm.convert" version "3.3.2"
-    id 'com.ewerk.gradle.plugins.querydsl' version "1.0.10" /// querydsl 플러그인
+   // id 'com.ewerk.gradle.plugins.querydsl' version "1.0.10" /// querydsl 플러그인
 }
 
 
@@ -36,6 +36,19 @@ repositories {
     mavenCentral()
 }
 
+
+configurations {
+    all{
+        exclude module: 'spring-boot-starter-logging'
+    } // compile configuration에서 특정 모듈 제외
+
+    //  compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging' // compile configuration에서 특정 그룹의 특정 모듈 제외
+    // all*.exclude group: 'org.gradle.test.excludes', module: 'reports' // 모든 configuration에서 특정 모듈 제외
+
+
+}
+
+
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
@@ -47,6 +60,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:${springBootStarterVersion}")
     implementation("org.springframework.boot:spring-boot-starter:${springBootStarterVersion}")
     implementation("org.springframework.boot:spring-boot-starter-tomcat:${springBootStarterVersion}") // war 생성시 주석처리, jar 생성시 필요
+    implementation("org.springframework.boot:spring-boot-starter-log4j2:${springBootStarterVersion}")
 
 
     /* ======= Spring DB  ========= */
@@ -83,6 +97,23 @@ dependencies {
     implementation group: 'com.querydsl', name: 'querydsl-sql', version: '4.3.1'
     implementation group: 'com.querydsl', name: 'querydsl-sql-spatial', version: '4.3.1'
     implementation group: 'com.querydsl', name: 'querydsl-sql-spring', version: '4.3.1'
+
+
+
+    /* ======== Log ======== */
+    /// SLF4J
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: "${slf4jVersion}"
+    implementation group: 'org.slf4j', name: 'slf4j-ext', version: "${slf4jVersion}"
+
+    /// LOG4J2
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: "${log4jVersion}"
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: "${log4jVersion}"
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: "${log4jVersion}"
+
 
 
 }
