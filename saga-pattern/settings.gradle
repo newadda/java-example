@@ -9,5 +9,6 @@
 
 rootProject.name = 'saga-pattern'
 include('common')
+include('bank')
 
 
