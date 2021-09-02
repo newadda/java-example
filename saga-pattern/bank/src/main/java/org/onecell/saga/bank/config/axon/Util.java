@@ -1,5 +1,6 @@
 package org.onecell.saga.bank.config.axon;
 
+import org.axonframework.axonserver.connector.AxonServerConfiguration;
 import org.axonframework.axonserver.connector.event.axon.AxonServerEventStore;
 import org.axonframework.commandhandling.AsynchronousCommandBus;
 import org.axonframework.commandhandling.CommandBus;
@@ -18,10 +19,14 @@ public class Util {
 
     }
 
-        public CommandBus axonServerEventStore() {
-            SimpleCommandBus commandBus = new AxonServerEventStore();
-            commandBus.registerHandlerInterceptor(new TransactionManagingInterceptor(springTransactionManager()));
-            return commandBus;
+        public AxonServerEventStore axonServerEventStore() {
+            AxonServerEventStore axonServerEventStore = AxonServerEventStore.builder().configuration(new AxonServerConfiguration() {
+                {
+                    setServers("localhost");
+                }
+            }).build();
+
+            return axonServerEventStore;
         }
 
 

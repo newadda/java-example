@@ -1,5 +1,7 @@
 package org.onecell.saga.bank.config.axon.hibernate;
 
+import org.axonframework.axonserver.connector.AxonServerConfiguration;
+import org.axonframework.axonserver.connector.event.axon.AxonServerEventStore;
 import org.axonframework.config.Configuration;
 import org.axonframework.config.Configurer;
 import org.axonframework.config.DefaultConfigurer;
@@ -20,7 +22,10 @@ public class ConfigurerCreator {
         SessionFactory sessionFactory = parameter.getSessionFactory();
         configurer = DefaultConfigurer.jpaConfiguration(new HibernateEntityManagerProvider(sessionFactory)
                 , springTransactionManagerToAxonTransactionManager(springPlatformTransactionManager));
+    }
 
+    public Configurer getConfigurer() {
+        return configurer;
     }
 
     private void registerAggregate()
@@ -37,6 +42,10 @@ public class ConfigurerCreator {
         List<Function<Configuration, Object>> eventHandlerList = parameter.getEventHandlerList();
 
     }
+
+
+
+
 
 
 }
