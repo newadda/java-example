@@ -72,11 +72,15 @@ public class DBConfig {
 
     @Bean()
     public SessionFactory sessionFactory() throws IOException {
-       String[] packagesScanPath= new String[]{};
+       String[] packagesScanPath= new String[]{
+               "org.axonframework.eventsourcing.eventstore.jpa",
+               "org.onecell.saga.bank.aggregates"
+       };
+
         Properties properties = new Properties() {
             {
                 setProperty("hibernate.hbm2ddl.auto",
-                        "none");
+                        "update");
                 setProperty("hibernate.show_sql",
                         "true");
                 setProperty("hibernate.dialect",

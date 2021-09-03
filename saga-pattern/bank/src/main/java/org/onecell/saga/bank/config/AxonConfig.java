@@ -2,6 +2,7 @@ package org.onecell.saga.bank.config;
 
 
 import lombok.RequiredArgsConstructor;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.common.transaction.TransactionManager;
 import org.axonframework.config.Configurer;
 import org.axonframework.config.DefaultConfigurer;
@@ -46,5 +47,22 @@ public class AxonConfig {
         return configurer;
     }
 
+
+    @Bean
+    public org.axonframework.config.Configuration axonConfiguration()
+    {
+        Configurer configurer = configurer();
+        org.axonframework.config.Configuration configuration = configurer.buildConfiguration();
+        configuration.start();
+        return configuration;
+    }
+
+    @Bean
+    public CommandGateway commandGateway()
+    {
+        org.axonframework.config.Configuration configuration = axonConfiguration();
+        CommandGateway commandGateway = configuration.commandGateway();
+        return commandGateway;
+    }
 
 }

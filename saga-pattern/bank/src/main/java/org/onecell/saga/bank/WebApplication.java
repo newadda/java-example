@@ -3,6 +3,9 @@ package org.onecell.saga.bank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationListener;
@@ -14,7 +17,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 @Slf4j
-@SpringBootApplication(scanBasePackages = {})
+@SpringBootApplication(scanBasePackages = {},exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
 @EnableAsync
 public class WebApplication extends SpringBootServletInitializer implements ApplicationListener<ContextClosedEvent> {
     private static final String TIME_ZONE = "Asia/Seoul";

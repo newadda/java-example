@@ -24,14 +24,33 @@ buildscript {
 }
 
 plugins {
+    id 'java'
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+    id 'org.springframework.boot' version '2.5.0' // bootjar 가능
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE' // sprint-boot 의 의존성 관리
 }
+
+compileJava.options.encoding = 'UTF-8'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
+
+configurations {
+    all{
+        exclude module: 'spring-boot-starter-logging'
+    } // compile configuration에서 특정 모듈 제외
+
+    //  compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging' // compile configuration에서 특정 그룹의 특정 모듈 제외
+    // all*.exclude group: 'org.gradle.test.excludes', module: 'reports' // 모든 configuration에서 특정 모듈 제외
+
+
+}
+
 
 dependencies {
     // Use JUnit test framework.
@@ -91,10 +110,15 @@ dependencies {
 
     /// Spring Data JPA
     implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: "${springBootStarterVersion}"
-
+    implementation group: 'org.springframework', name: 'spring-jdbc', version: '5.1.0.RELEASE'
 
     // multipart
     implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
+
+
+    // validator
+    // https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator
+    //implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version:  '5.5.0.Final'
 
 
 
@@ -102,6 +126,10 @@ dependencies {
     /// PostgreSQL JDBC
     // https://mvnrepository.com/artifact/org.postgresql/postgresql
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.20'
+
+    /// MySQL JDBC
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.12'
+
     /// Apache Commons DBCP
     // https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2
     implementation group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.8.0'
