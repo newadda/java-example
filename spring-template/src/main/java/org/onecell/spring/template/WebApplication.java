@@ -6,6 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationListener;
@@ -18,7 +20,10 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 @Slf4j
-@SpringBootApplication(scanBasePackages = {})
+@SpringBootApplication(scanBasePackages = {},exclude = {HibernateJpaAutoConfiguration.class})
+
+//DataSource Auto Configuration 무시하기
+//@SpringBootApplication(scanBasePackages = {},exclude = {HibernateJpaAutoConfiguration.class, DataSourceAutoConfiguration.class })
 @EnableAsync
 public class WebApplication extends SpringBootServletInitializer implements ApplicationListener<ContextClosedEvent> {
 
