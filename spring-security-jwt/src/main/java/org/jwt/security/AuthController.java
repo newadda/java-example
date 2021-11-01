@@ -53,11 +53,36 @@ public class AuthController {
                                     @RequestBody LoginDto loginDto
     ) {
 
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getId(), loginDto.getPassword()));
+        try {
+            authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+        }catch (AuthenticationException e)
+        {
+            throw new LoginFailException();
+        }
         User userDetails = (User)authenticate.getPrincipal();
         final String token = jwtTokenUtil.generateToken(userDetails);
 
         return new JwtTokenDto(token);
+        /*
+
+        JwtTokenDto jwtTokenDto = new JwtTokenDto();
+        jwtTokenDto.setJwt_token(token);
+
+
+        Collection<GrantedAuthority> authorities = userDetails.getAuthorities();
+
+        for(GrantedAuthority role:authorities)
+        {
+            String authority = role.getAuthority();
+            jwtTokenDto.getRoles().add(authority);
+        }
+
+        return jwtTokenDto;
+
+
+
+        * */
+
     }
 
     @Validated
