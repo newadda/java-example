@@ -40,6 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         auth.userDetailsService(inMemoryUserDetailsManager());
 
+        // DB 베이스
+        //auth.userDetailsService(dbUserDeailsService()).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -100,6 +102,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         return new InMemoryUserDetailsManager(userDetailsList);
     }
+
+
+    /// DB 베이스에서 쓰임
+    /*
+    @Bean
+    public UserDetailsService  dbUserDeailsService()
+    {
+        return new CustomUserDetailsService(tbInfoUserRepo);
+    }
+    */
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder()
