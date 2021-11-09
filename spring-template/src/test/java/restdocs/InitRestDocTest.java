@@ -1,4 +1,4 @@
-package org.test.onecell.restdoc;
+package restdocs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -8,16 +8,11 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.onecell.TestServer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
-import org.springframework.security.test.context.support.WithMockUser;
+//import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -32,11 +27,11 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 
 
-@ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
-@SpringBootTest(classes = TestServer.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(locations = "classpath:test.properties") // 테스트를 위한 properties 파일 위치를 지정한다.  /src/test/resources 에서 찾는다.
-@WithMockUser( roles = { "ADMIN","VISITOR"}) // Security 프로젝트의 테스트 권한 설정
-public  class Init {
+@TestPropertySource(locations = "classpath:test.properties")
+//@WithMockUser( roles = { "ADMIN","VISITOR"}) // 테스트 권한 설정
+public class InitRestDocTest {
+
+
     @Autowired
     protected WebApplicationContext context;
 
@@ -45,7 +40,7 @@ public  class Init {
 
     protected ObjectMapper mapper = new ObjectMapper();
 
-    public Init() {
+    public InitRestDocTest() {
         mapper.registerModule(new JavaTimeModule());
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(LocalDate.class,new LocalDateSerializer(DateTimeFormatter.ISO_DATE));
@@ -72,5 +67,8 @@ public  class Init {
                 .alwaysDo(document)
                 .build();
     }
+
+
+
 
 }

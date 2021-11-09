@@ -4,12 +4,16 @@ package restdocs;
 
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.onecell.spring.template.WebApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -25,9 +29,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@TestPropertySource(locations = "classpath:test.properties")
+//@WithMockUser( roles = { "ADMIN","VISITOR"}) // 테스트 권한 설정
+@ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @SpringBootTest(classes = WebApplication.class,webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class TestApi {
+public class TestApi extends InitRestDocTest {
 
     @Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
