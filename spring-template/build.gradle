@@ -133,12 +133,22 @@ dependencies {
 // https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
     implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.0.0'
 
+    //// modelmapper
+    // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.4'
 
 
     /* ======== DB ========*/
     /// PostgreSQL JDBC
     // https://mvnrepository.com/artifact/org.postgresql/postgresql
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.20'
+    /// Oracle JDBC
+    //implementation files('libs/ojdbc8-12c.jar')
+    /// Mysql JDBC
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    //implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.27'
+
+
     /// Apache Commons DBCP
     // https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2
     implementation group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.8.0'
@@ -173,6 +183,9 @@ dependencies {
     implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: "${log4jVersion}"
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: "${log4jVersion}"
+
+
+
 
 
 
