@@ -28,10 +28,10 @@ public class DataBaseConfig {
     PropertyConfig propertyConfig;
 
     static final String[] packagesScanPaths = new String[]{
-            "org.istech.db.entity.test"
+            "db.entity.test"
     };
     @Primary
-    @Bean(name = "ISTECH_Datasource")
+    @Bean(name = "Datasource")
     public DataSource dataSource()
     {
         DatabaseProp databaseProp = propertyConfig.databaseProp();
@@ -63,8 +63,8 @@ public class DataBaseConfig {
     }
 
     @Primary
-    @Bean(name = "ISTECH_EntityManagerFactory")
-    public SessionFactory sessionFactory(@Qualifier("ISTECH_Datasource")DataSource viburDatasource) throws IOException {
+    @Bean(name = "EntityManagerFactory")
+    public SessionFactory sessionFactory(@Qualifier("Datasource")DataSource viburDatasource) throws IOException {
         Properties properties = propertyConfig.hibernateProperties();
         SessionFactoryBeanFactory sessionFactoryBeanFactory = new SessionFactoryBeanFactory();
 
@@ -77,8 +77,8 @@ public class DataBaseConfig {
     }
 
     @Primary
-    @Bean(name = "ISTECH_TransactionManager")
-    public HibernateTransactionManager transactionManager(@Qualifier("ISTECH_EntityManagerFactory") SessionFactory sessionFactory)
+    @Bean(name = "TransactionManager")
+    public HibernateTransactionManager transactionManager(@Qualifier("EntityManagerFactory") SessionFactory sessionFactory)
     {
         TransactionManagerFactory transactionManagerFactory = new TransactionManagerFactory();
         HibernateTransactionManager hibernateTransactionManger = transactionManagerFactory.createHibernateTransactionManger(sessionFactory);
