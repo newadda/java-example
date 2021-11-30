@@ -3,10 +3,10 @@ package org.onecell.spring.template.config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
-import org.istech.libs.db.SessionFactoryBeanFactory;
-import org.istech.libs.db.TransactionManagerFactory;
-import org.istech.properties.DatabaseProp;
-import org.istech.properties.DbcpProp;
+import org.onecell.spring.template.db.SessionFactoryBeanFactory;
+import org.onecell.spring.template.db.TransactionManagerFactory;
+import org.onecell.spring.template.properties.DatabaseProp;
+import org.onecell.spring.template.properties.DbcpProp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

@@ -13,11 +13,9 @@ public class TestService {
 
 
 
-    @Transactional(transactionManager = "ISTECH_TransactionManager")
+    @Transactional(transactionManager = "TransactionManager")
     public void findAll()
     {
-
-
 
     }
 

@@ -1,0 +1,20 @@
+### profile name
+spring:
+  profiles:
+    active: dev
+
+---
+spring:
+  config:
+    activate.on-profile: dev
+    import: optional:classpath:dev.yml
+
+
+
+---
+spring:
+  config:
+    activate.on-profile: prod
+
+
+

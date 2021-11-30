@@ -1,13 +1,11 @@
 package org.onecell.spring.template.controller.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.istech.controller.AbstractController;
-import org.istech.service.TestService;
+import org.onecell.spring.template.controller.AbstractController;
+import org.onecell.spring.template.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +17,7 @@ import java.util.Locale;
 @RestController
 @Validated
 @RequestMapping(value = {"/api/v1/test/"})
-public class TestController extends  AbstractController {
+public class TestController extends AbstractController {
     @Autowired
     TestService testService;
 
@@ -36,15 +34,15 @@ public class TestController extends  AbstractController {
     }
 
     @Validated
-    @PreAuthorize("isAuthenticated() and hasAnyRole('ADMIN','VISITOR')")
+    //@PreAuthorize("isAuthenticated() and hasAnyRole('ADMIN','VISITOR')")
     @RequestMapping(value = {"/test"}, method = RequestMethod.GET)
     @ResponseBody
     public Object test(HttpServletRequest request, HttpServletResponse response, Locale locale
     ) {
 
-        DatasDto<TbExpOrganInfoDto> dto = broadcastService.listExpOrganInfo();
+        testService.findAll();
 
-        return dto;
+        return null;
     }
 
     /*
