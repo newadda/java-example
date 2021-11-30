@@ -8,7 +8,7 @@ spring:
   config:
     activate.on-profile: dev
     import: optional:classpath:dev.yml
-
+#   import: optional:file:./config/dev.yml
 
 
 ---

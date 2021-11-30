@@ -35,6 +35,7 @@ server:
 # Built-in log
 logging:
   config: classpath:log4j2.xml
+# config: ./config/log4j2.xml
   level:
     org.springframework.web.filter: debug
 
