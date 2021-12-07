@@ -1,6 +1,6 @@
 package org.onecell.spring.template.controller;
 
-import org.hibernate.service.spi.ServiceException;
+
 import org.onecell.spring.template.dto.error.ErrorRootDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -177,7 +177,7 @@ public class AbstractController {
         dto.getError().setUser_message(e.getLocalizedMessage());
         return dto;
     }*/
-
+/*
     @ResponseStatus(code = HttpStatus.BAD_REQUEST) //500 에러
     @ResponseBody
     @ExceptionHandler({ServiceException.class})
@@ -188,6 +188,6 @@ public class AbstractController {
         dto.getError().setUser_message(e.getLocalizedMessage());
         return dto;
     }
-
+*/
 
 }
