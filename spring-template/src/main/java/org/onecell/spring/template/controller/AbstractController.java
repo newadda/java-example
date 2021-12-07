@@ -1,5 +1,7 @@
 package org.onecell.spring.template.controller;
 
+import org.hibernate.service.spi.ServiceException;
+import org.onecell.spring.template.dto.error.ErrorRootDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractResourceBasedMessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,8 +50,10 @@ public class AbstractController {
     public Object MissingServletRequestParameterExceptionHandling(Exception e, WebRequest request, Locale locale)
     {
 
-
-        return null;
+        ErrorRootDto dto = new ErrorRootDto();
+        dto.getError().setCode(e.getClass().getSimpleName());
+        dto.getError().setUser_message( e.getLocalizedMessage());
+        return dto;
     }
 
 
@@ -65,7 +70,10 @@ public class AbstractController {
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     public Object ServletRequestBindingExceptionHandling(Exception e, WebRequest request, Locale locale)
     {
-        return null;
+        ErrorRootDto dto = new ErrorRootDto();
+        dto.getError().setCode(e.getClass().getSimpleName());
+        dto.getError().setUser_message( e.getLocalizedMessage());
+        return dto;
     }
 
     /**
@@ -80,7 +88,10 @@ public class AbstractController {
     @ExceptionHandler({ConstraintViolationException.class})
     public Object ConstraintViolationExceptionHandling(Exception e, WebRequest request, Locale locale)
     {
-      return null;
+        ErrorRootDto dto = new ErrorRootDto();
+        dto.getError().setCode(e.getClass().getName());
+        dto.getError().setUser_message(e.getLocalizedMessage());
+        return dto;
 
     }
 
@@ -97,7 +108,13 @@ public class AbstractController {
     @ExceptionHandler({BindException.class})
     public Object BindExceptionHandling(Exception e, WebRequest request, Locale locale)
     {
-        return null;
+        BindException castExcep = (BindException)  e;
+        FieldError fieldError = castExcep.getFieldError();
+
+        ErrorRootDto dto = new ErrorRootDto();
+        dto.getError().setCode(castExcep.getClass().getName());
+        dto.getError().setUser_message(fieldError.getDefaultMessage());
+        return dto;
     }
 
 
@@ -112,7 +129,11 @@ public class AbstractController {
     @ExceptionHandler({Exception.class,RuntimeException.class})
     public Object ExceptionHandling(Exception e, WebRequest request, Locale locale)
     {
-        return null;
+        log.warn("RuntimeException",e);
+        ErrorRootDto dto = new ErrorRootDto();
+        dto.getError().setCode(e.getClass().getSimpleName());
+        dto.getError().setUser_message(e.getLocalizedMessage());
+        return dto;
     }
 
 
@@ -130,7 +151,10 @@ public class AbstractController {
     public Object RuntimeExceptionHandling(RuntimeException e, WebRequest request)
     {
 
-        return null;
+         ErrorRootDto dto = new ErrorRootDto();
+        dto.getError().setCode(e.getClass().getSimpleName());
+        dto.getError().setUser_message(e.getLocalizedMessage());
+        return dto;
     }*/
 
     /**
@@ -148,13 +172,22 @@ public class AbstractController {
     @ExceptionHandler({ AuthenticationException.class})
     public Object AuthenticationExceptionHandling(AuthenticationException e, WebRequest request)
     {
+      ErrorRootDto dto = new ErrorRootDto();
+        dto.getError().setCode(e.getClass().getSimpleName());
+        dto.getError().setUser_message(e.getLocalizedMessage());
+        return dto;
+    }*/
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST) //500 에러
+    @ResponseBody
+    @ExceptionHandler({ServiceException.class})
+    public Object ServiceExceptionHandling(Exception e, WebRequest request, Locale locale)
+    {
         ErrorRootDto dto = new ErrorRootDto();
         dto.getError().setCode(e.getClass().getSimpleName());
         dto.getError().setUser_message(e.getLocalizedMessage());
-        return null;
-    }*/
-
-
+        return dto;
+    }
 
 
 }
