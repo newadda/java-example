@@ -61,8 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // login url은 권한이 필요없다.
                 .anyRequest().authenticated();
 
-        //// UsernamePasswordAuthenticationFilter 자기전에 할 filter를 지정한다.
-        /// jwt 처리
+        //// UsernamePasswordAuthenticationFilter 보다 먼저 처리 할 filter를 지정한다.
+        //// jwt 처리
         http.addFilterBefore(
                 jwtTokenFilterBean(),
                 //jwtAuthenticationFilterBean(),
