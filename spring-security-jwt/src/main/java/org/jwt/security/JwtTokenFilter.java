@@ -1,4 +1,4 @@
-package org.istech.security;
+package org.jwt.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.security.authentication.AuthenticationServiceException;

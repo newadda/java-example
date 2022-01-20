@@ -14,10 +14,12 @@ import java.util.function.Function;
 
 
 public class JwtTokenUtil implements Serializable {
+    static final String SIGNING_KEY="dfdasfffffasdfsdfaffsdsfa";
+    static final int ACCESS_TOKEN_VALIDITY_SECONDS=60*24*365;
 
     SecretKey secretKey;
     public JwtTokenUtil() {
-        this. secretKey = Keys.hmacShaKeyFor(org.istech.security.Constants.SIGNING_KEY.getBytes(StandardCharsets.UTF_8));
+        this. secretKey = Keys.hmacShaKeyFor(SIGNING_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
     public String getUsernameFromToken(String token) {
@@ -63,7 +65,7 @@ public class JwtTokenUtil implements Serializable {
                 .setClaims(claims)
                 .setIssuer("http://devglan.com")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + org.istech.security.Constants.ACCESS_TOKEN_VALIDITY_SECONDS*1000))
+                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS*1000))
                 .signWith(secretKey)
                 .compact();
     }

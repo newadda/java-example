@@ -1,8 +1,6 @@
-package org.mulbangul.server.security;
+package org.jwt.security;
 
-import org.istech.db.entity.TB_INFO_USER;
-import org.istech.libs.Codes;
-import org.istech.repository.impl.TbInfoUserRepo;
+
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,7 +8,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
 public class CustomUserDetailsService implements UserDetailsService {
-    UserRepo repo;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
+    }
+
+    /*UserRepo repo;
     public CustomUserDetailsService(UserRepo repo) {
         this.repo = repo;
 
@@ -34,4 +38,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         return userBuilder.build();
 
     }
+
+
+
+    */
 }
