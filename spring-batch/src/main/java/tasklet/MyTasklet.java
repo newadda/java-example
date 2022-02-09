@@ -27,13 +27,7 @@ public class MyTasklet implements Tasklet {
         // BATCH_JOB_EXECUTION_CONTEXT 테이블에 저장할 수 있고 읽을 수도 있다.
         // 이곳에 넣은 값은 execute()함수 끝날시 db에 갱신한다. 저장과 읽을수 있기 때문에 step의 파라미터나 지속적으로 변경되는 값으로 사용하면 된다.
         // tasklet이 끝나는 시점을 알기 위해서도 사용 가능하다.
-        ExecutionContext executionContext = chunkContext.getStepContext().getStepExecution().getJobExecution().getExecutionContext();
-
-
-
-
-
-
+        ExecutionContext executionContext = chunkContext.getStepContext().getStepExecution().getExecutionContext();
 
         return null;
     }
