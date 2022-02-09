@@ -163,7 +163,27 @@ public class JobParameterTest {
 
 
 
-        TaskletStep step1 = stepBuilderFactory.get("step1").tasklet(new MyTasklet()).build();
+        TaskletStep step1 = stepBuilderFactory.get("step1").tasklet(new MyTasklet())
+                .listener(new StepExecutionListener() {
+                    @Override
+                    public void beforeStep(StepExecution stepExecution) {
+
+                        /// Job Parameter 를 가져온다.
+                        JobParameters jobParameters = stepExecution.getJobParameters();
+
+                        /// Job Parameter 를 기반으로 Step Parameter를 만들어 Step 에 넣는것이다.
+                        StepParams parameter = new StepParams();
+                        //// 해당 Step Execution 에 Parameter를 넣으면 step 에서만 접근가능해 진다.
+                        stepExecution.getExecutionContext().put("KEY",parameter);
+                    }
+
+                    @Override
+                    public ExitStatus afterStep(StepExecution stepExecution) {
+                        return null;
+                    }
+                })
+
+                .build();
 
         TaskletStep step2 = stepBuilderFactory.get("step2").tasklet(new MyTasklet()).build();
         Job test = jobBuilderFactory.get("test").start(step1).next(step2)

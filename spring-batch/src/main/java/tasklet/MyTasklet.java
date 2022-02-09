@@ -29,6 +29,8 @@ public class MyTasklet implements Tasklet {
         // tasklet이 끝나는 시점을 알기 위해서도 사용 가능하다.
         ExecutionContext executionContext = chunkContext.getStepContext().getStepExecution().getExecutionContext();
 
+
+
         return null;
     }
 }
