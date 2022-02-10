@@ -79,8 +79,17 @@ public class AuthController {
             authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
         }catch (AuthenticationException e)
         {
+            /// 유저는 있는데 비번 실패
             throw new RuntimeException();
         }
+
+        if(authenticate == null)
+        {
+            // 유저가 없는 경우 authenticate 가 null이다.
+            //throw new RuntimeException();
+        }
+
+
         User userDetails = (User)authenticate.getPrincipal();
         final String token = jwtTokenUtil.generateToken(userDetails);
 
