@@ -12,6 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Locale;
 
+/*
+* 응답 객체
+* String: @ResponseBody 가 없을 경우 view 이름
+* void : 컨트롤러에서 응답을 직접 처리
+* ModelAndView : 모델과 뷰 정보를 함께 반환
+* Object : 메소드에 @ResponseBody가 적용된 경우, 리턴 객체를 Json, Xml 과 같은 알맞은 응답으로 변환
+* ResponseEntity : http 응답을 빠르게 만들어주기 위한 객체.
+* */
 
 @Slf4j
 @RestController
