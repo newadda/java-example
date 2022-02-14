@@ -31,7 +31,13 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 
-
+/*
+* Test 클래스에 아래의 설정을 매번 하게 되면 각 Test 클래스마다 Spring Context를 매번 구성하게 되어 테스트 속도가 느려진다.
+*
+* 이것을 상속 받아야 매번 Spring context 를 띄우지 않는다. Spring Context 구성은 딱 한번하게 된다.
+*
+*
+* */
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @SpringBootTest(classes = TestServer.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:test.properties") // 테스트를 위한 properties 파일 위치를 지정한다.  /src/test/resources 에서 찾는다.
@@ -65,7 +71,7 @@ public  class Init {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(documentationConfiguration(restDocumentation)
                         .operationPreprocessors().withRequestDefaults(
-                                modifyUris().host("istech.com").removePort(),prettyPrint()
+                                modifyUris().host("test.com").removePort(),prettyPrint()
                         ).withResponseDefaults(prettyPrint())
                 )
                 .alwaysDo(MockMvcResultHandlers.print())

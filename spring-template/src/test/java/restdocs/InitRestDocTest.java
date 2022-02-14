@@ -8,8 +8,10 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 //import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
@@ -26,7 +28,15 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 
-
+/*
+ * Test 클래스에 아래의 설정을 매번 하게 되면 각 Test 클래스마다 Spring Context를 매번 구성하게 되어 테스트 속도가 느려진다.
+ *
+ * 이것을 상속 받아야 매번 Spring context 를 띄우지 않는다. Spring Context 구성은 딱 한번하게 된다.
+ *
+ *
+ * */
+@ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
+@SpringBootTest(classes = TestServer.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:test.properties")
 //@WithMockUser( roles = { "ADMIN","VISITOR"}) // 테스트 권한 설정
 public class InitRestDocTest {
