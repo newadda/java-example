@@ -131,8 +131,11 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-       // registry.addResourceHandler("/*.js/**").addResourceLocations("/ui/static/");
-       // registry.addResourceHandler("/*.css/**").addResourceLocations("/ui/static/");
+
+        /* front-end 에 대한 파일 맵핑시 예를 들어 vuejs 로 만든 front 페이지에 대해.. */
+        // registry.addResourceHandler("/").addResourceLocations("classpath:/web/index.html");
+       // registry.addResourceHandler("/index.html").addResourceLocations("classpath:/web/index.html");
+       // registry.addResourceHandler("/**/").addResourceLocations("classpath:/web/");
     }
 
 
@@ -140,6 +143,10 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         //registry.addViewController("/").setViewName("login");
         //registry.addViewController("/login").setViewName("login");
+
+
+        /* "/" url시 자동으로 /index.html 로 forward 시킴 */
+       // registry.addViewController("/").setViewName("forward:/index.html");
     }
 
     @Override
@@ -149,6 +156,9 @@ public class MvcConfig implements WebMvcConfigurer {
         //registry.addConverter(new YearMonthConverter());
 
     }
+
+
+
 
 
     @Bean

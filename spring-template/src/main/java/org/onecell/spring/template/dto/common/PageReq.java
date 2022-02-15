@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 @Setter
 @NoArgsConstructor
 public class PageReq {
+
     public int page_num=0;
     public int limit=5000;
 

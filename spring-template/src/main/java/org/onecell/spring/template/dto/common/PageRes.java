@@ -30,6 +30,13 @@ public class PageRes<T> {
             this.page_num = pageImpl.getNumber();
             this.page_total = pageImpl.getTotalPages();
         }
+
+        public static PageInfo  createFromPageImpl(PageImpl pageImpl)
+        {
+            PageInfo pageInfo = new PageInfo();
+            pageInfo.fromPageImpl(pageImpl);
+            return pageInfo;
+        }
     }
 
     public PageRes(PageInfo page_info)
