@@ -3,6 +3,7 @@ package simple;
 import org.junit.Test;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
+import org.quartz.simpl.SimpleJobFactory;
 import quartz.QuartzConfig;
 
 import java.io.IOException;

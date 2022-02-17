@@ -58,6 +58,12 @@ project(':spring-web') {
     }
 }
 
+project(':quartz') {
+    dependencies {
+        // compile project(':spring-lib')
+    }
+}
+
 /*
 task wrapper(type: Wrapper) {
     gradleVersion = '6.3'
