@@ -1,5 +1,6 @@
 package org.test.onecell.restdoc;
 
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
@@ -117,6 +118,7 @@ public class Test01 extends Init{
     }
 
 
+    @Order(1)
     @Test
     public void 테스트06() throws Exception {
 
