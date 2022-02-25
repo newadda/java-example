@@ -56,7 +56,8 @@ public class TestController extends AbstractController {
     /*
         /// 비상연락처 목록
     @Validated
-    @PreAuthorize(ConstantProp.VISITOR_PREAUTHORIZE)
+    //@PreAuthorize("isAuthenticated() and hasAnyRole('ADMIN','VISITOR')")
+    //@PreAuthorize("isAuthenticated() and hasAnyAuthority('ROOT')")
     @RequestMapping(value = {"/sms_addrs"}, method = RequestMethod.GET, produces = {"application/json"})
     @ResponseBody
     public Object listSmsAddr(HttpServletRequest request, HttpServletResponse response, Locale locale,
@@ -67,7 +68,8 @@ public class TestController extends AbstractController {
 
     /// 비상연락처 생성 및 수정
     @Validated
-    @PreAuthorize(ConstantProp.ADMIN_PREAUTHORIZE)
+    //@PreAuthorize("isAuthenticated() and hasAnyRole('ADMIN','VISITOR')")
+    //@PreAuthorize("isAuthenticated() and hasAnyAuthority('ROOT')")
     @RequestMapping(value = {"/sms_addrs/create_or_update"}, method = RequestMethod.POST, produces = {"application/json"})
     @ResponseBody
     public Object createSmsAddr(HttpServletRequest request, HttpServletResponse response, Locale locale,

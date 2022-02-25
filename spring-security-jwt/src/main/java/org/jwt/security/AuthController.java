@@ -118,6 +118,7 @@ public class AuthController {
 
     @Validated
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("isAuthenticated() and hasAnyRole('ADMIN','VISITOR')")
     @RequestMapping(value = {"/test"}, method = RequestMethod.GET, produces = {"application/json"})
     @ResponseBody
     public Object listtest(HttpServletRequest request, HttpServletResponse response, Locale locale
