@@ -50,6 +50,7 @@ import org.vibur.dbcp.ViburDBCPDataSource;
 import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class jobTest {
@@ -270,10 +271,13 @@ public class jobTest {
         TaskletStep step1_1 = stepBuilderFactory.get("step1-1").tasklet(new MyTasklet()).build();
         TaskletStep step1_2 = stepBuilderFactory.get("step1-2").tasklet(new MyTasklet()).build();
         TaskletStep step2 = stepBuilderFactory.get("step2").tasklet(new MyTasklet2()).build();
+
         Job test = jobBuilderFactory.get("test").start(step1).next(step2)
                 .listener(new JobExecutionListener() {
                     @Override
                     public void beforeJob(JobExecution jobExecution) {
+
+
                         System.out.println("beforeJob");
                     }
 
