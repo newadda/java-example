@@ -94,6 +94,7 @@ public class MvcConfig implements WebMvcConfigurer {
             if (converter instanceof MappingJackson2HttpMessageConverter) {
                 MappingJackson2HttpMessageConverter jsonMessageConverter  = (MappingJackson2HttpMessageConverter) converter;
                 ObjectMapper objectMapper  = jsonMessageConverter.getObjectMapper();
+                objectMapper.registerModule(new JavaTimeModule()); // LocalDateTime, LocalDate, YearMonth 사용을 위해 꼭 등록하자.
                 objectMapper.setTimeZone(TimeZone.getDefault());
                 objectMapper.setLocale(Locale.getDefault());
 
