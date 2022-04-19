@@ -1,4 +1,4 @@
-package org.onecell.spring.template.db;
+package org.onecell.spring.template.lib.db;
 
 import org.hibernate.dialect.PostgreSQL95Dialect;
 import org.hibernate.dialect.function.SQLFunctionTemplate;

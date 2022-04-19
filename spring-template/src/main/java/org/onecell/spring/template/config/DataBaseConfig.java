@@ -3,8 +3,8 @@ package org.onecell.spring.template.config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
-import org.onecell.spring.template.db.SessionFactoryBeanFactory;
-import org.onecell.spring.template.db.TransactionManagerFactory;
+import org.onecell.spring.template.lib.db.SessionFactoryBeanFactory;
+import org.onecell.spring.template.lib.db.TransactionManagerFactory;
 import org.onecell.spring.template.properties.DatabaseProp;
 import org.onecell.spring.template.properties.DbcpProp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 
 import javax.sql.DataSource;
 import java.io.IOException;

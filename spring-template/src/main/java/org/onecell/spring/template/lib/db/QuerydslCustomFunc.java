@@ -1,4 +1,4 @@
-package org.onecell.spring.template.db;
+package org.onecell.spring.template.lib.db;
 
 import com.querydsl.core.types.dsl.DateTimeTemplate;
 import com.querydsl.core.types.dsl.Expressions;

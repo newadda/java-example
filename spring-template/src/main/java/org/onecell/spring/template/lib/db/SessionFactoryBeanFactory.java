@@ -1,4 +1,4 @@
-package org.onecell.spring.template.db;
+package org.onecell.spring.template.lib.db;
 
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaVendorAdapter;
