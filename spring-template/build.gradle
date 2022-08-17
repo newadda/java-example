@@ -60,12 +60,13 @@ configurations {
 
 dependencies {
 
+    // JUnit Test Framework 5.7
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.7.0")
     testImplementation('org.junit.jupiter:junit-jupiter:5.7.0')
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.7.0")
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.7.0'
 
-    // Use JUnit test framework.
+    // Use JUnit test framework. 4.
     //testImplementation 'junit:junit:4.13.1'
 
     // This dependency is exported to consumers, that is to say found on their compile classpath.
@@ -75,7 +76,7 @@ dependencies {
     implementation 'com.google.guava:guava:30.0-jre'
 
 
-    /* ======== Spring ========*/
+    /* [[[[ Spring ]]]] */
     implementation("org.springframework.boot:spring-boot-starter-parent:${springBootStarterVersion}")
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: "${springBootStarterVersion}"
     implementation("org.springframework.boot:spring-boot-starter-web:${springBootStarterVersion}")
@@ -89,6 +90,8 @@ dependencies {
                  exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
                  //  exclude group:'org.springframework.boot:spring-boot-starter-logging'
              }*/
+
+    // Log 시스템을 기본 logback 에서 log4j2 로 바꾼다.
     implementation("org.springframework.boot:spring-boot-starter-log4j2:${springBootStarterVersion}")
 
 
@@ -99,7 +102,7 @@ dependencies {
     implementation group: 'org.springframework', name: 'spring-tx', version: "${springVersion}"
     implementation group: 'org.springframework', name: 'spring-beans', version: "${springVersion}"
 
-    /// Spring Data JPA
+    /// (Spring Data JPA)
     implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: "${springBootStarterVersion}"
 
 
@@ -107,13 +110,29 @@ dependencies {
     implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
 
 
+
+
+    // Rest Doc & Test
+    // Test
+    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootStarterVersion}")
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.5.1'
+    testImplementation("org.springframework.boot:spring-boot-starter-web:${springBootStarterVersion}")
+
     // Rest Doc
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:1.2.6.RELEASE'
-    testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootStarterVersion}")
-    testImplementation("org.springframework.boot:spring-boot-starter-web:${springBootStarterVersion}")
 
 
+    /// Batch
+    implementation group: 'org.springframework.batch', name: 'spring-batch-core', version: "${springBatchVersion}"
+
+
+
+
+
+    // server sent event
+    //implementation group: 'ch.rasc', name: 'sse-eventbus', version: '1.1.9'
+    //providedCompile  group: 'org.immutables', name: 'value', version: '2.8.3'
 
 
     /* ======== ETC  ======== */
@@ -139,8 +158,20 @@ dependencies {
 
     /// jackson
     implementation  group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.12.5'
+    //implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
+    //implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.8'
+    //implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.8'
+    //implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.9.8'
 
-    /* ======== DB ========*/
+
+    /// Qr Code
+    implementation group: 'com.google.zxing', name: 'javase', version: '3.4.1'
+
+
+
+
+    /* [[[[ DB ]]]]*/
+    /* (JDBC) */
     /// PostgreSQL JDBC
     // https://mvnrepository.com/artifact/org.postgresql/postgresql
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.20'
@@ -150,16 +181,22 @@ dependencies {
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     //implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.27'
 
+    /// Derby JDBC
+    //implementation group: 'org.apache.derby', name: 'derby', version: '10.14.2.0'
+    //implementation group: 'org.apache.derby', name: 'derbyclient', version: '10.14.2.0'
 
-    /// Apache Commons DBCP
-    // https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2
-    implementation group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.8.0'
+
+
     /// hibernate
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
     implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.5.0.Final'
     implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '5.5.0.Final'
 
-    /// QueryDSL
+    //implementation group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '2.17.3'
+    //implementation group: 'org.hibernate.validator', name: 'hibernate-validator'
+    //implementation group: 'org.hibernate.common', name: 'hibernate-commons-annotations'
+
+    /* (QueryDSL) */
     implementation group: 'com.querydsl', name: 'querydsl-jpa', version: "${queryDSLVersion}"
     implementation group: 'com.querydsl', name: 'querydsl-jdo', version: "${queryDSLVersion}"
     implementation group: 'com.querydsl', name: 'querydsl-apt', version: "${queryDSLVersion}"
@@ -168,7 +205,16 @@ dependencies {
     implementation group: 'com.querydsl', name: 'querydsl-sql-spatial', version: "${queryDSLVersion}"
     implementation group: 'com.querydsl', name: 'querydsl-sql-spring', version: "${queryDSLVersion}"
 
+    /* (dialect) */
+    // Sqlite
+    implementation group: 'com.github.gwenn', name: 'sqlite-dialect', version: '0.1.2'
 
+
+    /* (DBCP) */
+    // Apache Common DBCP
+    implementation group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.8.0'
+    // HikariCP
+    implementation group: 'org.hibernate', name: 'hibernate-hikaricp'
 
 
 
@@ -185,6 +231,7 @@ dependencies {
     implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: "${log4jVersion}"
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: "${log4jVersion}"
+
 
 
 
