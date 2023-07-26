@@ -56,9 +56,9 @@ repositories {
     mavenCentral()
     maven { url "https://repo.spring.io/snapshot" }
     maven { url 'https://repo.spring.io/libs-snapshot' }
-    maven {
+    /*maven {
         url "http://maven.springframework.org/milestone"
-    }
+    }*/
 
 }
 
@@ -174,7 +174,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-maven-plugin:2.0.3.RELEASE')
 
 
-    testCompile('org.springframework.boot:spring-boot-starter-test:2.0.3.RELEASE')
+    testImplementation('org.springframework.boot:spring-boot-starter-test:2.0.3.RELEASE')
 
 
     // json

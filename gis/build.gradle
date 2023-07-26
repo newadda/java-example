@@ -31,17 +31,17 @@ ext {
 dependencies {
    // testCompile group: 'junit', name: 'junit', version: '4.12'
 
-    testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+    testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 
 
 
     // geotools, geometry 좌표변환에 사용
-    compile group: 'org.geotools', name: 'gt-main', version: "${geotoolsVersion}"
-    compile group: 'org.geotools', name: 'gt-epsg-extension', version: "${geotoolsVersion}"
-    compile group: 'org.geotools', name: 'gt-geojson', version: "${geotoolsVersion}"
-    compile group: 'org.geotools', name: 'gt-referencing', version: "${geotoolsVersion}"
+    implementation group: 'org.geotools', name: 'gt-main', version: "${geotoolsVersion}"
+    implementation group: 'org.geotools', name: 'gt-epsg-extension', version: "${geotoolsVersion}"
+    implementation group: 'org.geotools', name: 'gt-geojson', version: "${geotoolsVersion}"
+    implementation group: 'org.geotools', name: 'gt-referencing', version: "${geotoolsVersion}"
 
-    compile group: 'org.geolatte', name: 'geolatte', version: '1.5.0', ext: 'pom'
-    compile group: 'org.geolatte', name: 'geolatte-geom', version: '1.5.0' // org.geolatte.geom.jts 아래의 클래스를 사용하기 위해서 꼭 필요하다.
+    implementation group: 'org.geolatte', name: 'geolatte', version: '1.5.0', ext: 'pom'
+    implementation group: 'org.geolatte', name: 'geolatte-geom', version: '1.5.0' // org.geolatte.geom.jts 아래의 클래스를 사용하기 위해서 꼭 필요하다.
 
 }
