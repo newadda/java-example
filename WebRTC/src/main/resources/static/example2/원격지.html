@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+<div>
+  <video id="localVideo" autoplay playsinline controls="false"/>
+    </div>
+  <div>
+ <textarea id="tx">
+		adsadad
+ </textarea>
+  <button id="bt">test</button>
+  </div>
+
+<script>
+
+
+const signaling = new BroadcastChannel('webrtc');
+signaling.onmessage = e => {
+     console.log('onmessage',e);
+  switch (e.data.type) {
+    case 'offer':
+createConnection();
+      handleOffer(e.data);
+      break;
+    case 'answer':
+      handleAnswer(e.data);
+      break;
+    case 'candidate':
+      handleCandidate(e.data);
+      break;
+    case 'ready':
+      // A second tab joined. This tab will initiate a call unless in a call already.
+      if (pc) {
+        console.log('already in call, ignoring');
+        return;
+      }
+      makeCall();
+      break;
+    case 'bye':
+      if (pc) {
+        hangup();
+      }
+      break;
+    default:
+      console.log('unhandled', e);
+      break;
+  }
+};
+
+
+
+
+let stream11;
+let peerConnection;
+
+	
+	const constraints = {
+    'video': true,
+    'audio': true
+}
+
+navigator.mediaDevices.getDisplayMedia(constraints)
+    .then(stream => {
+        console.log('Got MediaStream:', stream);
+		const videoElement = document.querySelector('video#localVideo');
+        videoElement.srcObject = stream;
+		/*
+		stream11=stream;
+		stream.getTracks().forEach(track => {
+			console.log('stream', stream);
+			peerConnection.addTrack(track, stream);
+			});*/
+    })
+    .catch(error => {
+        console.error('Error accessing media devices.', error);
+    });
+
+ localStream =  navigator.mediaDevices.getUserMedia({audio: true, video: true});
+
+
+
+	
+	
+		const text = document.getElementById('tx');
+	const bt = document.querySelector('button#bt');
+
+
+
+	bt.onclick=()=>{
+	
+			  
+		const message = JSON.parse(text.value)
+		console.log("offer",message);
+		   const remoteDesc = new RTCSessionDescription(message);
+           peerConnection.setRemoteDescription(message).then(()=>{console.log("setRemoteDescription")});
+		   
+		   
+	
+	          
+			   peerConnection.createAnswer().then((answer) => 
+	{
+		console.log(answer)
+		console.log("answer",answer.toJSON())
+		console.log(JSON.stringify(answer))
+		peerConnection.setLocalDescription(answer)
+	}
+	)
+			  
+			  
+
+	
+		   
+	}
+	
+
+
+function createConnection()
+{
+
+
+
+      const configuration = {'iceServers': [
+    {
+        "urls": "stun:localhost:8888",
+    },
+    {
+        "urls": "turn:localhost:8888",
+        "username": "testuser",
+        "credential": "superpwd"
+    }
+]}
+    peerConnection = new RTCPeerConnection();
+
+
+peerConnection.onicecandidate = e => {
+		console.log("onicecandidate")
+    const message = {
+      type: 'candidate',
+      candidate: null,
+    };
+    if (e.candidate) {
+      message.candidate = e.candidate.candidate;
+      message.sdpMid = e.candidate.sdpMid;
+      message.sdpMLineIndex = e.candidate.sdpMLineIndex;
+    }
+    signaling.postMessage(message);
+  };
+
+
+
+        // handle error
+        peerConnection.onicecandidateerror = (e) => {
+            console.error(e);
+        
+        };
+peerConnection.oniceconnectionstatechange = (event) => {   console.log(event);};
+
+peerConnection.onicegatheringstatechange = (event) => {   console.log(event);};
+
+			  
+					 
+ peerConnection.addEventListener('datachannel', event => {
+    
+		console.log("dataChannel")
+		const dataChannel = event.channel;
+				dataChannel.addEventListener('message', event => {
+				console.log("dataChannel- message",event)
+					
+					const message = event.data;
+					console.log("message",message)
+					text.value = message + '\n';
+					
+				});
+			
+});			  
+					  
+					  
+					  
+
+	
+	
+	
+   	peerConnection.addEventListener('track',  (event) => {
+	console.log("event",event)
+    const [remoteStream] = event.streams;
+		const videoElement = document.querySelector('video#localVideo');
+    videoElement.srcObject = remoteStream;
+	});
+	
+
+
+}
+
+
+
+
+
+let dataChannel;
+function handleOffer(offer) {
+
+console.log("handleOffer");
+  peerConnection.setRemoteDescription(offer).then(()=>{
+
+		peerConnection.createAnswer().then((answer) => 
+	
+	   {
+	
+		console.log(answer)
+		console.log("answer",answer.toJSON())
+		console.log(JSON.stringify(answer))
+		  signaling.postMessage({type: 'answer', sdp: answer.sdp});
+		peerConnection.setLocalDescription(answer);
+	
+
+	
+	}
+	)
+
+
+
+    });
+
+   
+	
+}
+
+
+async function handleCandidate(candidate) {
+ console.log('handleCandidate');
+  if (!peerConnection) {
+    console.error('no peerconnection');
+    return;
+  }
+  if (!candidate.candidate) {
+     peerConnection.addIceCandidate(null);
+  } else {
+     peerConnection.addIceCandidate(candidate);
+  }
+}
+	
+
+	
+</script>
+
+</body>
+</html>

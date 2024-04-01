@@ -20,6 +20,7 @@ let localStream;
 
 const signaling = new BroadcastChannel('webrtc');
 signaling.onmessage = e => {
+  console.log('signaling.onmessage',e);
   if (!localStream) {
     console.log('not ready yet');
     return;
@@ -83,6 +84,7 @@ async function hangup() {
 function createPeerConnection() {
   pc = new RTCPeerConnection();
   pc.onicecandidate = e => {
+    console.log('onicecandidate',e);
     const message = {
       type: 'candidate',
       candidate: null,

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+<div>
+  <video id="localVideo" autoplay playsinline controls="false"/>
+    </div>
+  <div>
+
+  <button id="bt1">연결생성</button>
+<button id="bt3">데이터채널 생성</button>
+ <button id="bt2">peer연결(offer생성)</button>
+ <textarea id="tx">
+		adsadad
+ </textarea>
+ <button id="sendChat">채팅보내기</button>
+
+  </div>
+<script>
+
+
+const signaling = new BroadcastChannel('webrtc');
+signaling.onmessage = e => {
+   console.log('onmessage',e);
+  switch (e.data.type) {
+    case 'offer':
+      handleOffer(e.data);
+      break;
+    case 'answer':
+      handleAnswer(e.data);
+      break;
+    case 'candidate':
+      handleCandidate(e.data);
+      break;
+    case 'ready':
+      // A second tab joined. This tab will initiate a call unless in a call already.
+      if (pc) {
+        console.log('already in call, ignoring');
+        return;
+      }
+      makeCall();
+      break;
+    case 'bye':
+      if (pc) {
+        hangup();
+      }
+      break;
+    default:
+      console.log('unhandled', e);
+      break;
+  }
+};
+
+
+let peerConnection ;
+
+
+
+let stream11;
+	let dataChannel;
+
+
+	
+	const constraints = {
+    'video': true,
+    'audio': true
+}
+navigator.mediaDevices.getDisplayMedia(constraints)
+    .then(stream => {
+        console.log('Got MediaStream:', stream);
+		const videoElement = document.querySelector('video#localVideo');
+        videoElement.srcObject = stream;
+		/*
+		stream11=stream;
+		stream.getTracks().forEach(track => {
+			console.log('stream', stream);
+			peerConnection.addTrack(track, stream);
+			});*/
+    })
+    .catch(error => {
+        console.error('Error accessing media devices.', error);
+    });
+ localStream =  navigator.mediaDevices.getUserMedia({audio: true, video: true});
+	
+
+
+	
+
+
+
+	
+	const text = document.querySelector('textarea#tx');
+	const bt1 = document.querySelector('button#bt1');
+	const bt2 = document.querySelector('button#bt2');
+		const bt3 = document.querySelector('button#bt3');
+
+	const sendChat = document.querySelector('button#sendChat');
+	
+	
+	bt1.onclick=()=>{
+		makeConnection();
+
+	}
+
+bt2.onclick=()=>{
+		makeCall();
+
+	}
+
+	bt3.onclick=()=>{
+	
+
+		
+		makeDataChannel("ㄴㄴㄴㄴㄴ");
+
+	}
+
+	sendChat.onclick=()=>{
+	
+		dataChannel.send(text.value);
+		
+		
+
+	}
+	
+	
+
+	
+function makeConnection()
+{
+
+    const configuration = {'iceServers': [
+    {
+        "urls": "stun:eleventech.iptime.org:8888",
+    },
+    {
+        "urls": "turn:eleventech.iptime.org:8888",
+        "username": "testuser",
+        "credential": "superpwd"
+    }
+]}
+     peerConnection = new RTCPeerConnection();
+	peerConnection.onicecandidate = e => {
+		console.log("onicecandidate")
+    const message = {
+      type: 'candidate',
+      candidate: null,
+    };
+    if (e.candidate) {
+      message.candidate = e.candidate.candidate;
+      message.sdpMid = e.candidate.sdpMid;
+      message.sdpMLineIndex = e.candidate.sdpMLineIndex;
+    }
+    signaling.postMessage(message);
+  };
+ 
+
+      peerConnection.onicecandidateerror = (e) => {
+            console.error(e);
+        
+        };
+peerConnection.oniceconnectionstatechange = (event) => {   console.log(event);};
+
+peerConnection.onicegatheringstatechange = (event) => {   console.log(event);};
+
+			
+  peerConnection.ontrack = e => {console.log("ontrack")};
+
+
+				  peerConnection.addEventListener('datachannel', event => {
+    const dataChannel = event.channel;
+	console.log("dataChannel")
+	
+});
+
+}
+
+function makeCall()
+{
+
+
+
+		
+
+
+
+	
+
+    peerConnection.createOffer().then((offer) => 
+	{
+		console.log(offer)
+		console.log(offer.toJSON())
+		console.log(JSON.stringify(offer))
+		 signaling.postMessage({type: 'offer', sdp: offer.sdp});
+		peerConnection.setLocalDescription(offer).then(()=>{console.log("setLocalDescription")});
+
+
+	}
+	)
+	
+
+}
+
+
+function makeDataChannel(label)
+{
+
+			  	 console.log("peerConnection.createDataChannel");
+	  	dataChannel = peerConnection.createDataChannel(label, { reliable: true });
+		console.log("dataChannel",dataChannel);
+				dataChannel.onopen = function (event) {
+				 console.log("Hi you!");
+		
+		};
+		dataChannel.onmessage = function (event) {
+		  console.log(event.data);
+		};
+			dataChannel.onerror = function (event) {
+		  console.log(event.data);
+		};
+		
+		
+}
+
+
+
+
+
+	function handleAnswer(answer) {
+  if (!peerConnection) {
+    console.error('no peerconnection');
+    return;
+  }
+   console.log("handleAnswer");
+  peerConnection.setRemoteDescription(answer).then(()=>{
+
+})
+
+  
+  
+}
+
+
+
+async function handleCandidate(candidate) {
+
+ console.log('handleCandidate');
+  if (!peerConnection) {
+    console.error('no peerconnection');
+    return;
+  }
+  if (!candidate.candidate) {
+    peerConnection.addIceCandidate(null);
+  } else {
+    peerConnection.addIceCandidate(candidate);
+  }
+}
+	
+	
+	
+</script>
+
+</body>
+</html>
